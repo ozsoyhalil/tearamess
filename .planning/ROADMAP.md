@@ -30,7 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. A user can submit a review with a 1–5 star rating and the value stored in the database is the same 1–5 number the UI displayed (no 2x multiplier or column mismatch errors)
   3. Place cards, list cards, and profile cards all render with consistent shadow, border-radius, and hover lift — a designer can confirm they share one visual style without reading the code
   4. All form inputs (search, review, auth) share the same focus ring, placeholder style, and error state appearance
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 00-01-PLAN.md — Extract Card, Input, Textarea UI primitive components
+- [ ] 00-02-PLAN.md — Audit and fix rating pipeline and review content column
+- [ ] 00-03-PLAN.md — Token migration across all pages + apply components + remove hover handlers
 
 ### Phase 1: Foundation
 **Goal**: The codebase is safe and consistent to extend — all data access goes through a service layer, auth is enforced server-side, and all forms validate with Zod
@@ -92,7 +97,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Polish & Bugfix | 0/? | Not started | - |
+| 0. Polish & Bugfix | 0/3 | Not started | - |
 | 1. Foundation | 0/? | Not started | - |
 | 2. Social Graph | 0/? | Not started | - |
 | 3. Lists | 0/? | Not started | - |
