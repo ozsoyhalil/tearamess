@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: planning
+stopped_at: Phase 0 context gathered
+last_updated: "2026-03-13T12:45:28.193Z"
+last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
+progress:
+  total_phases: 6
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
+---
+
 # Project State
 
 ## Project Reference
@@ -61,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13
-Stopped at: Roadmap revised — Phase 0 added, ready to run `/gsd:plan-phase 0`
-Resume file: None
+Last session: 2026-03-13T12:45:28.185Z
+Stopped at: Phase 0 context gathered
+Resume file: .planning/phases/00-polish-bugfix/00-CONTEXT.md
