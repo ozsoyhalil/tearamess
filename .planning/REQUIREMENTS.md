@@ -10,7 +10,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Polish & Bugfix
 
 - [ ] **PLSH-01**: Tüm sayfalara tutarlı Tiramisu renk teması uygulanır (inline style'lar kaldırılır, Tailwind CSS custom token'larına taşınır); renkler: #FFF8F0 krem/bg, #C08552 karamel/primary, #8C5A3C kahve/secondary, #4B2E2B espresso/dark
-- [ ] **PLSH-02**: `reviews` tablosunda "comment" kolonu yerine "content" kolonu kullanılacak şekilde tüm query ve type tanımları düzeltilir; yıldız rating 10 üzerinden 5 üzerine normalize edilir (StarRating komponenti 0–5 aralığında çalışır)
+- [x] **PLSH-02**: `reviews` tablosunda "comment" kolonu yerine "content" kolonu kullanılacak şekilde tüm query ve type tanımları düzeltilir; yıldız rating 10 üzerinden 5 üzerine normalize edilir (StarRating komponenti 0–5 aralığında çalışır)
 - [x] **PLSH-03**: Kartlar, shadow, hover efektleri ve form stilleri için tutarlı görsel dil oluşturulur; tüm etkileşimli elemanlarda geçiş animasyonları eklenir
 
 ### Infrastructure
@@ -81,7 +81,7 @@ Which phases cover which requirements. Validated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PLSH-01 | Phase 0 | Pending |
-| PLSH-02 | Phase 0 | Pending |
+| PLSH-02 | Phase 0 | Complete |
 | PLSH-03 | Phase 0 | Complete |
 | INFRA-01 | Phase 1 | Pending |
 | INFRA-02 | Phase 1 | Pending |
