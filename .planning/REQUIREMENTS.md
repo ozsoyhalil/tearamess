@@ -1,0 +1,100 @@
+# Requirements: Tearamess
+
+**Defined:** 2026-03-13
+**Core Value:** Bulunduğun şehri bir keşif oyunu gibi deneyimle — gittiğin yerleri kaydet, gidecekklerini planla, Ankara'nın grid haritasını doldur ve istatistiklerini izle.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Infrastructure
+
+- [ ] **INFRA-01**: Service layer `src/lib/services/` oluşturulur ve mevcut inline Supabase sorguları buraya taşınır
+- [ ] **INFRA-02**: `middleware.ts` ile server-side auth koruması uygulanır, client-side yönlendirmeler kaldırılır
+- [ ] **INFRA-03**: Tüm yeni formlar Zod şema doğrulaması ve React Hook Form ile yazılır
+
+### Social
+
+- [ ] **SOCL-01**: Kullanıcı başka bir kullanıcıyı takip edebilir (tek yönlü)
+- [ ] **SOCL-02**: Kullanıcı kendi takip/takipçi listesini görebilir
+- [ ] **SOCL-03**: Kullanıcı takip ettiklerinin son aktivitelerini (ziyaret, yorum) feed'de görebilir
+- [ ] **SOCL-04**: Kullanıcı başka bir kullanıcının herkese açık profilini, listelerini ve ziyaret geçmişini görebilir
+
+### Lists
+
+- [ ] **LIST-01**: Kullanıcı bir mekanı tek tıkla "Gideceğim Yerler" listesine ekleyip çıkarabilir
+- [ ] **LIST-02**: Kullanıcı isimlendirilmiş özel liste oluşturabilir (örn. "En iyi kahvaltılıklar")
+- [ ] **LIST-03**: Kullanıcı oluşturduğu listelere mekan ekleyip çıkarabilir
+- [ ] **LIST-04**: Kullanıcı listesini herkese açık yapabilir; başkaları profilinde görebilir
+
+### Exploration
+
+- [ ] **XPLR-01**: Kullanıcı bir mekana check-in yapabilir
+- [ ] **XPLR-02**: Check-in yapılan konumdan Ankara grid hücresi hesaplanır ve kullanıcı haritasında işaretlenir
+- [ ] **XPLR-03**: Kullanıcı Ankara'nın yüzde kaçını keşfettiğini görebilir (boyalı hücre / toplam hücre)
+- [ ] **XPLR-04**: Kullanıcı istatistik sayfasında toplam ziyaret sayısı, kategori dağılımı, aktiflik takvimi ve en çok gittiği bölgeleri görebilir
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Anonymous Notes
+
+- **NOTE-01**: Kullanıcı bir mekana anonim not bırakabilir
+- **NOTE-02**: O mekana check-in yapan kullanıcılar mevcut anonim notları keşfedebilir
+- **NOTE-03**: Anonim notlarda user_id API payload'unda gizlenir (maskeleme)
+- **NOTE-04**: Location-gate Supabase RLS policy ile server-side enforce edilir
+
+### Events
+
+- **EVNT-01**: Mekan bazlı etkinlik (sergi, konser, workshop) oluşturulabilir
+- **EVNT-02**: Kullanıcı yaklaşan etkinlikleri keşfedebilir ve kayıt olabilir
+- **EVNT-03**: Takip edilen mekanların etkinlikleri bildirim olarak gelir
+
+### Multi-city
+
+- **CITY-01**: Kullanıcı birden fazla şehir için grid oluşturabilir
+- **CITY-02**: Şehir seçimi kayıt sırasında yapılır
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Eventler (v1) | Ghost-town riski — bootstrap stratejisi olmadan anlamsız; v2'ye ertelendi |
+| Anonim notlar (v1) | RLS location-gate kompleksliği; check-in sistemi oturduktan sonra daha güvenli build edilir |
+| Mobil uygulama | Web-first yaklaşım, mobil v2+ |
+| İki yönlü arkadaşlık sistemi | Letterboxd tarzı tek yönlü takip yeterli |
+| Gerçek zamanlı sohbet | Kapsam dışı |
+| Ödeme/monetizasyon | v1 değil |
+| Ankara dışı şehirler (v1) | Tek şehirde derinlik önce |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INFRA-01 | Phase 1 | Pending |
+| INFRA-02 | Phase 1 | Pending |
+| INFRA-03 | Phase 1 | Pending |
+| SOCL-01 | Phase 2 | Pending |
+| SOCL-02 | Phase 2 | Pending |
+| SOCL-03 | Phase 2 | Pending |
+| SOCL-04 | Phase 2 | Pending |
+| LIST-01 | Phase 3 | Pending |
+| LIST-02 | Phase 3 | Pending |
+| LIST-03 | Phase 3 | Pending |
+| LIST-04 | Phase 3 | Pending |
+| XPLR-01 | Phase 4 | Pending |
+| XPLR-02 | Phase 4 | Pending |
+| XPLR-03 | Phase 5 | Pending |
+| XPLR-04 | Phase 5 | Pending |
+
+**Coverage:**
+- v1 requirements: 15 total
+- Mapped to phases: 15
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-03-13*
+*Last updated: 2026-03-13 after initial definition*
