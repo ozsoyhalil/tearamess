@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FFF8F0;
+  --color-caramel: #C08552;
+  --color-caramel-light: #D4A574;
+  --color-caramel-dark: #A06B3C;
+  --color-coffee: #8C5A3C;
+  --color-coffee-light: #A07050;
+  --color-coffee-dark: #6B4530;
+  --color-espresso: #4B2E2B;
+  --color-espresso-light: #5C3A36;
+  --color-espresso-dark: #3A2320;
+  --color-warmgray-100: #F5EDE4;
+  --color-warmgray-200: #E8DDD1;
+  --color-warmgray-300: #D4C5B5;
+  --color-warmgray-400: #B8A898;
+  --color-warmgray-500: #9C8E7E;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #FFF8F0;
+    color: #4B2E2B;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  ::selection {
+    background-color: #C08552;
+    color: #FFF8F0;
+  }
+
+  option {
+    background-color: #FFF8F0;
+    color: #4B2E2B;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5;
+    cursor: pointer;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
