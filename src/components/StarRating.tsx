@@ -23,7 +23,7 @@ export default function StarRating({ value, onChange, size = 'md' }: Props) {
 
   return (
     <div
-      style={{ display: 'flex', alignItems: 'center', gap: 3 }}
+      className="flex items-center gap-0.5"
       onMouseLeave={() => !readOnly && setHover(null)}
     >
       {[1, 2, 3, 4, 5].map((i) => {
@@ -51,7 +51,7 @@ export default function StarRating({ value, onChange, size = 'md' }: Props) {
         )
       })}
       {!readOnly && display > 0 && (
-        <span style={{ marginLeft: 6, fontSize: 13, color: '#8C5A3C', fontWeight: 600 }}>
+        <span className="text-coffee font-semibold" style={{ marginLeft: 6, fontSize: 13 }}>
           {display}
         </span>
       )}
