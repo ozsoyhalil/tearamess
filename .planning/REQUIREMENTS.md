@@ -7,6 +7,12 @@
 
 Requirements for initial release. Each maps to roadmap phases.
 
+### Polish & Bugfix
+
+- [ ] **PLSH-01**: Tüm sayfalara tutarlı Tiramisu renk teması uygulanır (inline style'lar kaldırılır, Tailwind CSS custom token'larına taşınır); renkler: #FFF8F0 krem/bg, #C08552 karamel/primary, #8C5A3C kahve/secondary, #4B2E2B espresso/dark
+- [ ] **PLSH-02**: `reviews` tablosunda "comment" kolonu yerine "content" kolonu kullanılacak şekilde tüm query ve type tanımları düzeltilir; yıldız rating 10 üzerinden 5 üzerine normalize edilir (StarRating komponenti 0–5 aralığında çalışır)
+- [ ] **PLSH-03**: Kartlar, shadow, hover efektleri ve form stilleri için tutarlı görsel dil oluşturulur; tüm etkileşimli elemanlarda geçiş animasyonları eklenir
+
 ### Infrastructure
 
 - [ ] **INFRA-01**: Service layer `src/lib/services/` oluşturulur ve mevcut inline Supabase sorguları buraya taşınır
@@ -70,10 +76,13 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements. Validated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| PLSH-01 | Phase 0 | Pending |
+| PLSH-02 | Phase 0 | Pending |
+| PLSH-03 | Phase 0 | Pending |
 | INFRA-01 | Phase 1 | Pending |
 | INFRA-02 | Phase 1 | Pending |
 | INFRA-03 | Phase 1 | Pending |
@@ -91,10 +100,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | XPLR-04 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 15 total
-- Mapped to phases: 15
-- Unmapped: 0 ✓
+- v1 requirements: 18 total
+- Mapped to phases: 18
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-13*
-*Last updated: 2026-03-13 after initial definition*
+*Last updated: 2026-03-13 — Phase 0 (Polish & Bugfix) added; PLSH-01, PLSH-02, PLSH-03 inserted; traceability updated*
