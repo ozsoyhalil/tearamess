@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 0 context gathered
-last_updated: "2026-03-13T12:45:28.193Z"
+stopped_at: "Completed 00-polish-bugfix-01 (UI primitives: Card, Input, Textarea)"
+last_updated: "2026-03-13T18:17:15.085Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 00-polish-bugfix P01 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,7 @@ Recent decisions affecting current work:
 - Roadmap: Service/repository layer is Phase 1 prerequisite — all subsequent phases depend on it
 - Roadmap: Phase 4 (Check-in + Grid) depends only on Phase 1, not Phase 3 — can be parallelized if needed
 - Roadmap: Anonymous notes (NOTE-01–04) and Events (EVNT-01–03) deferred to v2 — not in v1 scope
+- [Phase 00-polish-bugfix]: Named exports chosen for Card/Input/Textarea UI primitives; static Record<Variant,string> pattern for Tailwind JIT safety; outline-none + focus:ring-2 eliminates onFocus/onBlur handlers
 
 ### Pending Todos
 
@@ -77,6 +79,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T12:45:28.185Z
-Stopped at: Phase 0 context gathered
-Resume file: .planning/phases/00-polish-bugfix/00-CONTEXT.md
+Last session: 2026-03-13T18:17:15.083Z
+Stopped at: Completed 00-polish-bugfix-01 (UI primitives: Card, Input, Textarea)
+Resume file: None
