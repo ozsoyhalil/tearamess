@@ -43,7 +43,7 @@ export default function ProfilePage() {
       ])
       if (profileRes.data) setProfile(profileRes.data)
       if (placesRes.data) setPlaces(placesRes.data)
-      if (reviewsRes.data) setReviews(reviewsRes.data as Review[])
+      if (reviewsRes.data) setReviews(reviewsRes.data as unknown as Review[])
       setDataLoading(false)
     }
     fetchData()
@@ -175,7 +175,6 @@ export default function ProfilePage() {
                 fontSize: 14,
                 fontWeight: tab === t ? 600 : 400,
                 color: tab === t ? '#C08552' : '#9C8E7E',
-                borderBottom: tab === t ? '2px solid #C08552' : '2px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 backgroundColor: 'transparent',

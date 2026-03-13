@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar'
 import StarRating from '@/components/StarRating'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
+import type { Review } from '@/types/review'
 
 type Place = {
   id: string
@@ -18,16 +19,6 @@ type Place = {
   description: string | null
   created_by: string
   created_at: string
-}
-
-type Review = {
-  id: string
-  rating: number
-  content: string | null
-  visit_date: string | null
-  created_at: string
-  user_id: string
-  profiles: { username: string; display_name: string | null } | null
 }
 
 function ratingLabel(r: number) {
