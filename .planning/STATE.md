@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 00-polish-bugfix-02 (rating pipeline audit and canonical Review type)
-last_updated: "2026-03-13T18:22:49.204Z"
+stopped_at: Completed 00-polish-bugfix-03 (token migration final sweep)
+last_updated: "2026-03-13T18:30:52.145Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 00-polish-bugfix P01 | 2 | 2 tasks | 3 files |
 | Phase 00-polish-bugfix P02 | 4min | 2 tasks | 3 files |
+| Phase 00-polish-bugfix P03 | 15min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,7 @@ Recent decisions affecting current work:
 - [Phase 00-polish-bugfix]: Named exports chosen for Card/Input/Textarea UI primitives; static Record<Variant,string> pattern for Tailwind JIT safety; outline-none + focus:ring-2 eliminates onFocus/onBlur handlers
 - [Phase 00-polish-bugfix]: Canonical Review type uses content: string | null (not comment) to match DB schema; profiles field optional with display_name/avatar_url to support multiple query shapes
 - [Phase 00-polish-bugfix]: Canonical types live in src/types/; pages import from there — no local type redeclarations for shared DB record shapes
+- [Phase 00-polish-bugfix]: Token migration complete: onFocus/onBlur functional handlers distinguished from style mutation handlers and kept; gradient/rgba exceptions preserved
 
 ### Pending Todos
 
@@ -82,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:22:49.202Z
-Stopped at: Completed 00-polish-bugfix-02 (rating pipeline audit and canonical Review type)
+Last session: 2026-03-13T18:30:52.143Z
+Stopped at: Completed 00-polish-bugfix-03 (token migration final sweep)
 Resume file: None

@@ -12,7 +12,7 @@ Tearamess is a brownfield project — auth, place browsing, ratings, and profile
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 0: Polish & Bugfix** - Tiramisu tema tutarlılığı, kritik veri hataları, ve temel UI kalitesi
+- [x] **Phase 0: Polish & Bugfix** - Tiramisu tema tutarlılığı, kritik veri hataları, ve temel UI kalitesi (completed 2026-03-13)
 - [ ] **Phase 1: Foundation** - Service/repository layer, middleware auth guard, and Zod form validation
 - [ ] **Phase 2: Social Graph** - One-way follow system, public user profiles, and activity feed
 - [ ] **Phase 3: Lists** - Wishlist and custom lists for organizing and sharing places
@@ -97,7 +97,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Polish & Bugfix | 2/3 | In Progress|  |
+| 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
 | 1. Foundation | 0/? | Not started | - |
 | 2. Social Graph | 0/? | Not started | - |
 | 3. Lists | 0/? | Not started | - |
