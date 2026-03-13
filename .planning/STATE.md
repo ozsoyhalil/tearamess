@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Completed 00-polish-bugfix-03 (token migration final sweep)
-last_updated: "2026-03-13T18:30:52.145Z"
+last_updated: "2026-03-13T18:34:01.878Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
