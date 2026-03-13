@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import StarRating from '@/components/StarRating'
+import { Card } from '@/components/ui/Card'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 
@@ -53,8 +54,8 @@ export default function ProfilePage() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFF8F0' }}>
-          <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: '#C08552', borderTopColor: 'transparent' }} />
+        <div className="min-h-screen flex items-center justify-center bg-cream">
+          <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
         </div>
       </>
     )
@@ -78,111 +79,82 @@ export default function ProfilePage() {
       <main className="max-w-3xl mx-auto px-4 py-10">
 
         {/* Profile card */}
-        <div
-          className="rounded-2xl p-8 border mb-6"
-          style={{
-            backgroundColor: '#ffffff',
-            borderColor: '#E8DDD1',
-            boxShadow: '0 2px 12px rgba(75,46,43,0.07)',
-          }}
-        >
+        <Card variant="default" className="p-8 mb-6">
           <div className="flex items-start gap-5">
             <div>
-              <div
-                className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold"
-                style={{ backgroundColor: '#C08552', color: '#FFF8F0' }}
-              >
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold bg-caramel text-cream">
                 {(displayName ?? '?')[0].toUpperCase()}
               </div>
-              <button className="text-sm mt-1 text-center w-20" style={{ color: '#C08552' }}>
+              <button className="text-sm mt-1 text-center w-20 text-caramel">
                 Düzenle
               </button>
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-bold mb-0.5" style={{ color: '#4B2E2B' }}>{displayName}</h1>
+              <h1 className="text-2xl font-bold mb-0.5 text-espresso">{displayName}</h1>
               {profile?.username && (
-                <p className="text-sm" style={{ color: '#8C5A3C' }}>@{profile.username}</p>
+                <p className="text-sm text-coffee">@{profile.username}</p>
               )}
-              <p className="text-sm mt-0.5" style={{ color: '#9C8E7E' }}>{user.email}</p>
+              <p className="text-sm mt-0.5 text-warmgray-500">{user.email}</p>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="flex gap-8 mt-6 pt-6" style={{ borderTop: '1px solid #F5EDE4' }}>
+          <div className="flex gap-8 mt-6 pt-6 border-t border-warmgray-100">
             {[
               { label: 'Review', value: reviews.length },
               { label: 'Mekan', value: places.length },
               { label: 'Ort. Puan', value: avgRating ?? '—' },
             ].map(({ label, value }) => (
               <div key={label} className="text-center">
-                <div className="text-2xl font-bold" style={{ color: '#C08552' }}>{value}</div>
-                <div
-                  className="text-xs uppercase tracking-wider mt-0.5"
-                  style={{ color: '#9C8E7E' }}
-                >
+                <div className="text-2xl font-bold text-caramel">{value}</div>
+                <div className="text-xs uppercase tracking-wider mt-0.5 text-warmgray-500">
                   {label}
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
 
         {/* Rating distribution */}
         {reviews.length > 0 && (
-          <div
-            className="rounded-2xl p-6 border mb-6"
-            style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1', boxShadow: '0 2px 8px rgba(75,46,43,0.05)' }}
-          >
-            <h3 className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9C8E7E' }}>
+          <Card variant="flat" className="p-6 mb-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider mb-4 text-warmgray-500">
               Puan Dağılımı
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div className="flex flex-col gap-2">
               {dist.map(({ star, count }) => {
                 const pct = reviews.length > 0 ? (count / reviews.length) * 100 : 0
                 return (
-                  <div key={star} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 12, color: '#9C8E7E', width: 10, textAlign: 'right', fontWeight: 500 }}>
+                  <div key={star} className="flex items-center gap-2.5">
+                    <span className="text-xs text-warmgray-500 w-2.5 text-right font-medium">
                       {star}
                     </span>
-                    <span style={{ color: '#C08552', fontSize: 12 }}>★</span>
-                    <div style={{ flex: 1, height: 8, backgroundColor: '#F5EDE4', borderRadius: 4, overflow: 'hidden' }}>
+                    <span className="text-caramel text-xs">★</span>
+                    <div className="flex-1 h-2 bg-warmgray-100 rounded overflow-hidden">
                       <div
-                        style={{
-                          width: `${pct}%`,
-                          height: '100%',
-                          backgroundColor: '#C08552',
-                          borderRadius: 4,
-                          transition: 'width 0.5s ease',
-                        }}
+                        className="h-full bg-caramel rounded transition-[width] duration-500 ease-out"
+                        style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span style={{ fontSize: 12, color: '#B8A898', width: 14, textAlign: 'right' }}>{count}</span>
+                    <span className="text-xs text-warmgray-400 w-3.5 text-right">{count}</span>
                   </div>
                 )
               })}
             </div>
-          </div>
+          </Card>
         )}
 
         {/* Tabs */}
-        <div style={{ borderBottom: '1px solid #E8DDD1', display: 'flex', gap: 0, marginBottom: 20 }}>
+        <div className="flex border-b border-warmgray-200 mb-5">
           {(['reviews', 'places'] as Tab[]).map(t => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              style={{
-                padding: '12px 24px',
-                fontSize: 14,
-                fontWeight: tab === t ? 600 : 400,
-                color: tab === t ? '#C08552' : '#9C8E7E',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backgroundColor: 'transparent',
-                border: 'none',
-                borderBottom: tab === t ? '2px solid #C08552' : '2px solid transparent',
-              } as React.CSSProperties}
-              onMouseEnter={e => { if (tab !== t) e.currentTarget.style.color = '#8C5A3C' }}
-              onMouseLeave={e => { if (tab !== t) e.currentTarget.style.color = '#9C8E7E' }}
+              className={`px-6 py-3 text-sm transition-all duration-200 border-b-2 -mb-px ${
+                tab === t
+                  ? 'font-semibold text-caramel border-caramel'
+                  : 'font-normal text-warmgray-500 border-transparent hover:text-coffee'
+              }`}
             >
               {t === 'reviews' ? `Reviewlarım (${reviews.length})` : `Mekanlarım (${places.length})`}
             </button>
@@ -191,42 +163,37 @@ export default function ProfilePage() {
 
         {/* Reviews */}
         {tab === 'reviews' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="flex flex-col gap-3">
             {reviews.length === 0 ? (
-              <p style={{ color: '#B8A898', fontSize: 14 }}>Henüz review yazmamışsın.</p>
+              <p className="text-sm text-warmgray-400">Henüz review yazmamışsın.</p>
             ) : reviews.map(review => (
-              <div
+              <Card
                 key={review.id}
-                className="rounded-xl p-5 border transition-all duration-200"
-                style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#D4C5B5'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(75,46,43,0.08)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8DDD1'; e.currentTarget.style.boxShadow = 'none' }}
+                variant="default"
+                className="p-5 hover:border-warmgray-300 hover:shadow-md transition-all duration-200"
               >
                 <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
                   <div>
                     {review.places ? (
                       <Link
                         href={`/place/${review.places.slug}`}
-                        className="font-semibold transition-colors"
-                        style={{ color: '#4B2E2B' }}
-                        onMouseEnter={e => (e.currentTarget.style.color = '#C08552')}
-                        onMouseLeave={e => (e.currentTarget.style.color = '#4B2E2B')}
+                        className="font-semibold transition-colors text-espresso hover:text-caramel"
                       >
                         {review.places.name}
                       </Link>
                     ) : (
-                      <span style={{ color: '#B8A898', fontWeight: 600 }}>Mekan silindi</span>
+                      <span className="text-warmgray-400 font-semibold">Mekan silindi</span>
                     )}
                     {review.places && (
                       <p className="text-xs mt-0.5">
-                        <span style={{ color: '#C08552', fontWeight: 600 }}>{review.places.category}</span>
-                        <span style={{ color: '#9C8E7E' }}> · {review.places.city}</span>
+                        <span className="text-caramel font-semibold">{review.places.category}</span>
+                        <span className="text-warmgray-500"> · {review.places.city}</span>
                       </p>
                     )}
                   </div>
                   <div className="text-right">
                     <StarRating value={review.rating} size="sm" />
-                    <div className="text-xs mt-0.5" style={{ color: '#B8A898' }}>
+                    <div className="text-xs mt-0.5 text-warmgray-400">
                       {review.visit_date
                         ? `Ziyaret: ${review.visit_date}`
                         : new Date(review.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -234,14 +201,11 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 {review.content && (
-                  <p
-                    className="text-sm leading-relaxed pt-2 mt-1"
-                    style={{ color: '#8C5A3C', borderTop: '1px solid #F5EDE4' }}
-                  >
+                  <p className="text-sm leading-relaxed pt-2 mt-1 border-t border-warmgray-100 text-coffee">
                     {review.content}
                   </p>
                 )}
-              </div>
+              </Card>
             ))}
           </div>
         )}
@@ -250,38 +214,27 @@ export default function ProfilePage() {
         {tab === 'places' && (
           <div>
             {places.length === 0 ? (
-              <p style={{ color: '#B8A898', fontSize: 14 }}>
+              <p className="text-sm text-warmgray-400">
                 Henüz mekan eklememişsin.{' '}
-                <Link href="/new" style={{ color: '#C08552' }}>İlk mekanını ekle</Link>.
+                <Link href="/new" className="text-caramel">İlk mekanını ekle</Link>.
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {places.map(place => (
-                  <Link
-                    key={place.id}
-                    href={`/place/${place.slug}`}
-                    className="rounded-2xl p-5 border transition-all duration-200 group"
-                    style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1' }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(75,46,43,0.1)'
-                      e.currentTarget.style.borderColor = '#D4C5B5'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.boxShadow = 'none'
-                      e.currentTarget.style.borderColor = '#E8DDD1'
-                    }}
-                  >
-                    <span
-                      className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2"
-                      style={{ backgroundColor: 'rgba(192,133,82,0.12)', color: '#C08552' }}
-                    >
-                      {place.category}
-                    </span>
-                    <h3 className="font-semibold mb-0.5" style={{ color: '#4B2E2B' }}>{place.name}</h3>
-                    <p className="text-sm" style={{ color: '#9C8E7E' }}>{place.city}</p>
-                    <p className="text-xs mt-2" style={{ color: '#B8A898' }}>
-                      {new Date(place.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </p>
+                  <Link key={place.id} href={`/place/${place.slug}`}>
+                    <Card variant="interactive" className="p-5">
+                      <span
+                        className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 text-caramel"
+                        style={{ backgroundColor: 'rgba(192,133,82,0.12)' }}
+                      >
+                        {place.category}
+                      </span>
+                      <h3 className="font-semibold mb-0.5 text-espresso">{place.name}</h3>
+                      <p className="text-sm text-warmgray-500">{place.city}</p>
+                      <p className="text-xs mt-2 text-warmgray-400">
+                        {new Date(place.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </p>
+                    </Card>
                   </Link>
                 ))}
               </div>

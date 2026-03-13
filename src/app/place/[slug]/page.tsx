@@ -5,6 +5,9 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import StarRating from '@/components/StarRating'
+import { Card } from '@/components/ui/Card'
+import { Input } from '@/components/ui/Input'
+import { Textarea } from '@/components/ui/Textarea'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import type { Review } from '@/types/review'
@@ -28,18 +31,6 @@ function ratingLabel(r: number) {
   if (r >= 3) return 'İyi'
   if (r >= 2) return 'Vasat'
   return 'Zayıf'
-}
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '12px 16px',
-  backgroundColor: '#F5EDE4',
-  border: '1px solid #D4C5B5',
-  borderRadius: 12,
-  color: '#4B2E2B',
-  fontSize: 14,
-  outline: 'none',
-  transition: 'border-color 0.2s',
 }
 
 export default function PlacePage() {
@@ -122,8 +113,8 @@ export default function PlacePage() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFF8F0' }}>
-          <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: '#C08552', borderTopColor: 'transparent' }} />
+        <div className="min-h-screen flex items-center justify-center bg-cream">
+          <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
         </div>
       </>
     )
@@ -134,8 +125,8 @@ export default function PlacePage() {
       <>
         <Navbar />
         <main className="max-w-3xl mx-auto px-4 py-20 text-center">
-          <p className="text-lg mb-2" style={{ color: '#8C5A3C' }}>Mekan bulunamadı.</p>
-          <Link href="/explore" className="text-sm" style={{ color: '#C08552' }}>← Keşfete dön</Link>
+          <p className="text-lg mb-2 text-coffee">Mekan bulunamadı.</p>
+          <Link href="/explore" className="text-sm text-caramel">← Keşfete dön</Link>
         </main>
       </>
     )
@@ -147,38 +138,31 @@ export default function PlacePage() {
       <main className="max-w-3xl mx-auto px-4 py-10">
 
         {/* Place info card */}
-        <div
-          className="rounded-2xl p-8 mb-6 border"
-          style={{
-            backgroundColor: '#ffffff',
-            borderColor: '#E8DDD1',
-            boxShadow: '0 2px 12px rgba(75,46,43,0.07)',
-          }}
-        >
+        <Card variant="default" className="p-8 mb-6">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex-1 min-w-0">
               <span
-                className="inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3"
-                style={{ backgroundColor: 'rgba(192,133,82,0.12)', color: '#C08552' }}
+                className="inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3 text-caramel"
+                style={{ backgroundColor: 'rgba(192,133,82,0.12)' }}
               >
                 {place.category}
               </span>
-              <h1 className="text-3xl font-bold mb-2 leading-tight" style={{ color: '#4B2E2B' }}>
+              <h1 className="text-3xl font-bold mb-2 leading-tight text-espresso">
                 {place.name}
               </h1>
-              <p className="text-sm" style={{ color: '#8C5A3C' }}>
+              <p className="text-sm text-coffee">
                 📍 {place.neighborhood ? `${place.neighborhood}, ` : ''}{place.city}
               </p>
             </div>
 
             {avgRating !== null ? (
               <div className="text-right flex-shrink-0">
-                <div className="text-5xl font-black leading-none" style={{ color: '#C08552' }}>{avgRating}</div>
-                <div className="text-sm font-medium mt-1" style={{ color: '#9C8E7E' }}>{ratingLabel(avgRating)}</div>
-                <div className="text-xs mt-0.5" style={{ color: '#B8A898' }}>{reviews.length} değerlendirme</div>
+                <div className="text-5xl font-black leading-none text-caramel">{avgRating}</div>
+                <div className="text-sm font-medium mt-1 text-warmgray-500">{ratingLabel(avgRating)}</div>
+                <div className="text-xs mt-0.5 text-warmgray-400">{reviews.length} değerlendirme</div>
               </div>
             ) : (
-              <div className="text-sm italic" style={{ color: '#B8A898' }}>Henüz puan yok</div>
+              <div className="text-sm italic text-warmgray-400">Henüz puan yok</div>
             )}
           </div>
 
@@ -190,45 +174,38 @@ export default function PlacePage() {
 
           {place.description && (
             <p
-              className="mt-5 pt-5 leading-relaxed text-sm border-t"
-              style={{ color: '#8C5A3C', borderTopColor: '#F5EDE4' }}
+              className="mt-5 pt-5 leading-relaxed text-sm border-t text-coffee border-warmgray-100"
             >
               {place.description}
             </p>
           )}
-        </div>
+        </Card>
 
         {/* Review form */}
         <div className="mb-8">
-          <h2 className="text-xs font-bold uppercase tracking-[0.15em] mb-4" style={{ color: '#9C8E7E' }}>
+          <h2 className="text-xs font-bold uppercase tracking-[0.15em] mb-4 text-warmgray-500">
             Değerlendirmeni Yaz
           </h2>
 
           {!user ? (
-            <div
-              className="rounded-2xl p-6 border text-sm"
-              style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1', color: '#9C8E7E' }}
-            >
+            <Card variant="default" className="p-6 text-sm text-warmgray-500">
               Değerlendirmek için{' '}
-              <Link href="/auth/login" className="font-semibold" style={{ color: '#C08552' }}>
+              <Link href="/auth/login" className="font-semibold text-caramel">
                 giriş yap
               </Link>.
-            </div>
+            </Card>
           ) : alreadyReviewed ? (
-            <div
-              className="rounded-2xl p-6 border text-sm"
-              style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1', color: '#9C8E7E' }}
-            >
+            <Card variant="default" className="p-6 text-sm text-warmgray-500">
               Bu mekan için zaten değerlendirme yazdın.
-            </div>
+            </Card>
           ) : (
             <form
               onSubmit={handleSubmit}
-              className="rounded-2xl p-6 border space-y-5"
-              style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1', boxShadow: '0 2px 12px rgba(75,46,43,0.07)' }}
+              className="rounded-2xl p-6 border border-warmgray-200 bg-white space-y-5"
+              style={{ boxShadow: '0 2px 12px rgba(75,46,43,0.07)' }}
             >
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9C8E7E' }}>
+                <label className="block text-xs font-bold uppercase tracking-wider mb-3 text-warmgray-500">
                   Puan *
                 </label>
                 <StarRating
@@ -238,46 +215,30 @@ export default function PlacePage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#9C8E7E' }}>
-                  Yorum
-                </label>
-                <textarea
-                  value={form.content}
-                  onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))}
-                  rows={3}
-                  placeholder="Bu mekan hakkında ne düşünüyorsun?"
-                  style={{ ...inputStyle, resize: 'none', minHeight: 90 }}
-                  onFocus={e => { e.target.style.borderColor = '#C08552' }}
-                  onBlur={e => { e.target.style.borderColor = '#D4C5B5' }}
-                />
-              </div>
+              <Textarea
+                label="Yorum"
+                id="content"
+                value={form.content}
+                onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))}
+                rows={3}
+                placeholder="Bu mekan hakkında ne düşünüyorsun?"
+              />
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#9C8E7E' }}>
-                  Ziyaret Tarihi
-                </label>
-                <input
-                  type="date"
-                  value={form.visit_date}
-                  onChange={e => setForm(prev => ({ ...prev, visit_date: e.target.value }))}
-                  style={{ ...inputStyle, width: 'auto' }}
-                  onFocus={e => { e.target.style.borderColor = '#C08552' }}
-                  onBlur={e => { e.target.style.borderColor = '#D4C5B5' }}
-                />
-              </div>
+              <Input
+                type="date"
+                label="Ziyaret Tarihi"
+                id="visit_date"
+                value={form.visit_date}
+                onChange={e => setForm(prev => ({ ...prev, visit_date: e.target.value }))}
+                className="w-auto"
+              />
 
-              {formError && <p className="text-sm" style={{ color: '#ef4444' }}>{formError}</p>}
+              {formError && <p className="text-sm text-red-400">{formError}</p>}
 
               <button
                 type="submit"
                 disabled={submitting || form.rating === 0}
-                className="px-7 py-3 rounded-xl font-bold text-sm transition-all duration-200"
-                style={{
-                  backgroundColor: form.rating === 0 || submitting ? '#D4C5B5' : '#C08552',
-                  color: '#FFF8F0',
-                  cursor: form.rating === 0 || submitting ? 'not-allowed' : 'pointer',
-                }}
+                className="px-7 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-caramel text-cream hover:bg-caramel-dark disabled:bg-warmgray-300 disabled:cursor-not-allowed"
               >
                 {submitting ? 'Gönderiliyor…' : 'Gönder'}
               </button>
@@ -287,12 +248,12 @@ export default function PlacePage() {
 
         {/* Reviews list */}
         <div>
-          <h2 className="text-xs font-bold uppercase tracking-[0.15em] mb-4" style={{ color: '#9C8E7E' }}>
+          <h2 className="text-xs font-bold uppercase tracking-[0.15em] mb-4 text-warmgray-500">
             Değerlendirmeler ({reviews.length})
           </h2>
 
           {reviews.length === 0 ? (
-            <p className="text-sm italic" style={{ color: '#B8A898' }}>
+            <p className="text-sm italic text-warmgray-400">
               Henüz değerlendirme yok. İlk sen yaz!
             </p>
           ) : (
@@ -300,23 +261,19 @@ export default function PlacePage() {
               {reviews.map(review => (
                 <div
                   key={review.id}
-                  className="rounded-xl p-5"
-                  style={{ backgroundColor: '#F5EDE4' }}
+                  className="rounded-xl p-5 bg-warmgray-100"
                 >
                   <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
                     <div className="flex items-center gap-3">
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0"
-                        style={{ backgroundColor: '#C08552', color: '#FFF8F0' }}
-                      >
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0 bg-caramel text-cream">
                         {(review.profiles?.display_name || review.profiles?.username || '?')[0].toUpperCase()}
                       </div>
                       <div>
-                        <span className="text-sm font-semibold" style={{ color: '#4B2E2B' }}>
+                        <span className="text-sm font-semibold text-espresso">
                           {review.profiles?.display_name || review.profiles?.username || 'Anonim'}
                         </span>
                         {review.profiles?.username && review.profiles.display_name && (
-                          <span className="text-xs ml-1.5" style={{ color: '#9C8E7E' }}>
+                          <span className="text-xs ml-1.5 text-warmgray-500">
                             @{review.profiles.username}
                           </span>
                         )}
@@ -324,7 +281,7 @@ export default function PlacePage() {
                     </div>
                     <div className="text-right">
                       <StarRating value={review.rating} size="sm" />
-                      <div className="text-xs mt-0.5" style={{ color: '#9C8E7E' }}>
+                      <div className="text-xs mt-0.5 text-warmgray-500">
                         {review.visit_date
                           ? `Ziyaret: ${review.visit_date}`
                           : new Date(review.created_at).toLocaleDateString('tr-TR', {
@@ -334,7 +291,7 @@ export default function PlacePage() {
                     </div>
                   </div>
                   {review.content && (
-                    <p className="text-sm leading-relaxed pl-11" style={{ color: '#6B4530' }}>
+                    <p className="text-sm leading-relaxed pl-11 text-coffee">
                       {review.content}
                     </p>
                   )}

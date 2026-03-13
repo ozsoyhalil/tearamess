@@ -3,6 +3,9 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
+import { Card } from '@/components/ui/Card'
+import { Input } from '@/components/ui/Input'
+import { Textarea } from '@/components/ui/Textarea'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 
@@ -33,26 +36,6 @@ function toSlug(text: string): string {
   return text.split('').map(c => tr[c] ?? c).join('')
     .toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim()
     .replace(/\s+/g, '-').replace(/-+/g, '-')
-}
-
-const fieldStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '12px 16px',
-  backgroundColor: '#F5EDE4',
-  border: '1px solid #D4C5B5',
-  borderRadius: 12,
-  color: '#4B2E2B',
-  fontSize: 14,
-  outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
-}
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  fontSize: 14,
-  fontWeight: 500,
-  color: '#4B2E2B',
-  marginBottom: 8,
 }
 
 export default function NewPlacePage() {
@@ -94,8 +77,8 @@ export default function NewPlacePage() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFF8F0' }}>
-          <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: '#C08552', borderTopColor: 'transparent' }} />
+        <div className="min-h-screen flex items-center justify-center bg-cream">
+          <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
         </div>
       </>
     )
@@ -132,42 +115,32 @@ export default function NewPlacePage() {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold mb-1" style={{ color: '#4B2E2B' }}>Yeni Mekan Ekle</h1>
-        <p className="mb-8" style={{ color: '#8C5A3C' }}>Keşfettiğin bir yeri topluluğa tanıt.</p>
+        <h1 className="text-3xl font-bold mb-1 text-espresso">Yeni Mekan Ekle</h1>
+        <p className="mb-8 text-coffee">Keşfettiğin bir yeri topluluğa tanıt.</p>
 
-        <div
-          className="rounded-2xl p-8 border"
-          style={{
-            backgroundColor: '#ffffff',
-            borderColor: '#E8DDD1',
-            boxShadow: '0 2px 12px rgba(75,46,43,0.06)',
-          }}
-        >
-          <form onSubmit={handleSubmit}>
+        <Card variant="default" className="p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={labelStyle}>Mekan Adı *</label>
-              <input
-                value={form.name}
-                onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Örn: Bebek Sahili"
-                required
-                style={fieldStyle}
-                onFocus={e => { e.target.style.borderColor = '#C08552'; e.target.style.boxShadow = '0 0 0 3px rgba(192,133,82,0.15)' }}
-                onBlur={e => { e.target.style.borderColor = '#D4C5B5'; e.target.style.boxShadow = 'none' }}
-              />
-            </div>
+            <Input
+              label="Mekan Adı *"
+              id="name"
+              value={form.name}
+              onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+              placeholder="Örn: Bebek Sahili"
+              required
+            />
 
             {/* Category */}
-            <div style={{ marginBottom: 20 }}>
-              <label style={labelStyle}>Kategori *</label>
+            <div className="w-full">
+              <label htmlFor="category" className="block text-sm font-medium text-espresso mb-2">
+                Kategori *
+              </label>
               <select
+                id="category"
                 value={form.category}
                 onChange={e => setForm(prev => ({ ...prev, category: e.target.value }))}
                 required
-                style={{ ...fieldStyle, cursor: 'pointer', appearance: 'auto' }}
-                onFocus={e => { e.target.style.borderColor = '#C08552'; e.target.style.boxShadow = '0 0 0 3px rgba(192,133,82,0.15)' }}
-                onBlur={e => { e.target.style.borderColor = '#D4C5B5'; e.target.style.boxShadow = 'none' }}
+                className="w-full px-4 py-3 rounded-xl bg-warmgray-100 text-espresso text-sm border outline-none focus:ring-2 focus:ring-caramel focus:border-caramel transition-all duration-200 border-warmgray-300 cursor-pointer"
               >
                 <option value="" disabled>Kategori seç…</option>
                 {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -175,55 +148,30 @@ export default function NewPlacePage() {
             </div>
 
             {/* City + Neighborhood */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label style={labelStyle}>Şehir *</label>
-                <div ref={cityRef} style={{ position: 'relative' }}>
+                <label htmlFor="city" className="block text-sm font-medium text-espresso mb-2">
+                  Şehir *
+                </label>
+                <div ref={cityRef} className="relative">
                   <input
+                    id="city"
                     value={cityInput}
                     onChange={e => handleCityChange(e.target.value)}
                     onBlur={() => setTimeout(() => setShowCitySuggestions(false), 150)}
                     placeholder="İstanbul"
                     required
                     autoComplete="off"
-                    style={fieldStyle}
-                    onFocus={e => { e.target.style.borderColor = '#C08552'; e.target.style.boxShadow = '0 0 0 3px rgba(192,133,82,0.15)' }}
+                    className="w-full px-4 py-3 rounded-xl bg-warmgray-100 text-espresso text-sm border outline-none placeholder:text-warmgray-400 focus:ring-2 focus:ring-caramel focus:border-caramel transition-all duration-200 border-warmgray-300"
                   />
                   {showCitySuggestions && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '100%',
-                        left: 0,
-                        right: 0,
-                        marginTop: 4,
-                        backgroundColor: '#ffffff',
-                        border: '1px solid #D4C5B5',
-                        borderRadius: 12,
-                        overflow: 'hidden',
-                        zIndex: 50,
-                        boxShadow: '0 8px 24px rgba(75,46,43,0.12)',
-                      }}
-                    >
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-warmgray-300 rounded-xl overflow-hidden z-50" style={{ boxShadow: '0 8px 24px rgba(75,46,43,0.12)' }}>
                       {citySuggestions.map(city => (
                         <button
                           key={city}
                           type="button"
                           onMouseDown={() => selectCity(city)}
-                          style={{
-                            display: 'block',
-                            width: '100%',
-                            textAlign: 'left',
-                            padding: '10px 16px',
-                            fontSize: 14,
-                            color: '#4B2E2B',
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.15s',
-                          }}
-                          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F5EDE4')}
-                          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                          className="block w-full text-left px-4 py-2.5 text-sm text-espresso bg-transparent hover:bg-warmgray-100 transition-colors duration-150 cursor-pointer border-none"
                         >
                           {city}
                         </button>
@@ -232,52 +180,37 @@ export default function NewPlacePage() {
                   )}
                 </div>
               </div>
-              <div>
-                <label style={labelStyle}>Semt</label>
-                <input
-                  value={form.neighborhood}
-                  onChange={e => setForm(prev => ({ ...prev, neighborhood: e.target.value }))}
-                  placeholder="Beyoğlu"
-                  style={fieldStyle}
-                  onFocus={e => { e.target.style.borderColor = '#C08552'; e.target.style.boxShadow = '0 0 0 3px rgba(192,133,82,0.15)' }}
-                  onBlur={e => { e.target.style.borderColor = '#D4C5B5'; e.target.style.boxShadow = 'none' }}
-                />
-              </div>
-            </div>
-
-            {/* Description */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={labelStyle}>Açıklama</label>
-              <textarea
-                value={form.description}
-                onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
-                rows={4}
-                placeholder="Bu mekanı özel kılan ne? Deneyimini anlat…"
-                style={{ ...fieldStyle, resize: 'none', minHeight: 120 }}
-                onFocus={e => { e.target.style.borderColor = '#C08552'; e.target.style.boxShadow = '0 0 0 3px rgba(192,133,82,0.15)' }}
-                onBlur={e => { e.target.style.borderColor = '#D4C5B5'; e.target.style.boxShadow = 'none' }}
+              <Input
+                label="Semt"
+                id="neighborhood"
+                value={form.neighborhood}
+                onChange={e => setForm(prev => ({ ...prev, neighborhood: e.target.value }))}
+                placeholder="Beyoğlu"
               />
             </div>
 
-            {error && <p className="text-sm mb-4" style={{ color: '#ef4444' }}>{error}</p>}
+            {/* Description */}
+            <Textarea
+              label="Açıklama"
+              id="description"
+              value={form.description}
+              onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
+              rows={4}
+              placeholder="Bu mekanı özel kılan ne? Deneyimini anlat…"
+            />
+
+            {error && <p className="text-sm text-red-400">{error}</p>}
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 rounded-xl font-semibold text-lg transition-all duration-200"
-              style={{
-                backgroundColor: submitting ? '#D4C5B5' : '#C08552',
-                color: '#FFF8F0',
-                cursor: submitting ? 'not-allowed' : 'pointer',
-                boxShadow: submitting ? 'none' : '0 4px 14px rgba(192,133,82,0.35)',
-              }}
-              onMouseEnter={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#A06B3C' }}
-              onMouseLeave={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#C08552' }}
+              className="w-full py-3 rounded-xl font-semibold text-lg transition-all duration-200 bg-caramel text-cream hover:bg-caramel-dark disabled:bg-warmgray-300 disabled:cursor-not-allowed"
+              style={{ boxShadow: submitting ? 'none' : '0 4px 14px rgba(192,133,82,0.35)' }}
             >
               {submitting ? 'Ekleniyor…' : 'Mekanı Ekle'}
             </button>
           </form>
-        </div>
+        </Card>
       </main>
     </>
   )

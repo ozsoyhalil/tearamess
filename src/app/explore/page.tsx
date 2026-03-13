@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import StarRating from '@/components/StarRating'
+import { Card } from '@/components/ui/Card'
+import { Input } from '@/components/ui/Input'
 import { supabase } from '@/lib/supabase'
 
 const CATEGORIES = [
@@ -121,60 +123,37 @@ export default function ExplorePage() {
 
         {/* Header + search */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-1" style={{ color: '#4B2E2B' }}>Keşfet</h1>
-          <p className="text-sm mb-5" style={{ color: '#9C8E7E' }}>
+          <h1 className="text-3xl font-bold mb-1 text-espresso">Keşfet</h1>
+          <p className="text-sm mb-5 text-warmgray-500">
             Topluluk tarafından eklenen mekanları keşfet.
           </p>
 
           <div ref={searchRef} className="relative max-w-2xl">
-            <input
+            <Input
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
               onFocus={() => hits.length > 0 && setShowDrop(true)}
               placeholder="Mekan ara..."
-              className="w-full px-5 py-3 rounded-xl border-2 text-base transition-all duration-200 outline-none"
-              style={{
-                backgroundColor: '#ffffff',
-                borderColor: query ? '#C08552' : '#D4C5B5',
-                color: '#4B2E2B',
-                boxShadow: query ? '0 0 0 3px rgba(192,133,82,0.15)' : 'none',
-              }}
-              onFocusCapture={e => {
-                e.currentTarget.style.borderColor = '#C08552'
-                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(192,133,82,0.15)'
-              }}
-              onBlurCapture={e => {
-                if (!query) {
-                  e.currentTarget.style.borderColor = '#D4C5B5'
-                  e.currentTarget.style.boxShadow = 'none'
-                }
-              }}
+              className="text-base"
             />
             {searchLoading && (
-              <div
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 border-2 rounded-full animate-spin"
-                style={{ borderColor: '#C08552', borderTopColor: 'transparent' }}
-              />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
             )}
 
             {/* Autocomplete dropdown */}
             {showDrop && (
               <div
-                className="absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden z-50 border"
-                style={{ backgroundColor: '#ffffff', borderColor: '#E8DDD1', boxShadow: '0 8px 30px rgba(75,46,43,0.15)' }}
+                className="absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden z-50 border bg-white border-warmgray-200"
+                style={{ boxShadow: '0 8px 30px rgba(75,46,43,0.15)' }}
               >
                 {hits.length === 0 ? (
-                  <div
-                    className="px-5 py-4 text-sm flex items-center justify-between"
-                    style={{ color: '#9C8E7E' }}
-                  >
-                    <span>"{query}" bulunamadı</span>
+                  <div className="px-5 py-4 text-sm flex items-center justify-between text-warmgray-500">
+                    <span>&quot;{query}&quot; bulunamadı</span>
                     <Link
                       href="/new"
                       onClick={() => setShowDrop(false)}
-                      className="font-semibold transition-colors"
-                      style={{ color: '#C08552' }}
+                      className="font-semibold transition-colors text-caramel"
                     >
                       + Bu mekanı ekle
                     </Link>
@@ -186,31 +165,27 @@ export default function ExplorePage() {
                         key={hit.id}
                         href={`/place/${hit.slug}`}
                         onClick={() => { setShowDrop(false); setQuery('') }}
-                        className="flex items-center justify-between px-5 py-3 transition-colors group border-b"
-                        style={{ borderBottomColor: '#F5EDE4' }}
-                        onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FFF8F0')}
-                        onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
+                        className="flex items-center justify-between px-5 py-3 transition-colors group border-b border-warmgray-100 hover:bg-cream"
                       >
                         <div>
-                          <span className="font-semibold transition-colors" style={{ color: '#4B2E2B' }}>
+                          <span className="font-semibold transition-colors text-espresso">
                             {hit.name}
                           </span>
-                          <span className="text-xs ml-2" style={{ color: '#9C8E7E' }}>{hit.city}</span>
+                          <span className="text-xs ml-2 text-warmgray-500">{hit.city}</span>
                         </div>
                         <span
-                          className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                          style={{ backgroundColor: 'rgba(192,133,82,0.12)', color: '#C08552' }}
+                          className="text-xs font-semibold px-2.5 py-1 rounded-full text-caramel"
+                          style={{ backgroundColor: 'rgba(192,133,82,0.12)' }}
                         >
                           {hit.category}
                         </span>
                       </Link>
                     ))}
-                    <div className="px-5 py-2.5 flex justify-end" style={{ backgroundColor: '#FDFAF7' }}>
+                    <div className="px-5 py-2.5 flex justify-end bg-cream">
                       <Link
                         href="/new"
                         onClick={() => setShowDrop(false)}
-                        className="text-xs font-medium transition-colors"
-                        style={{ color: '#C08552' }}
+                        className="text-xs font-medium transition-colors text-caramel"
                       >
                         + Aradığın mekan listede yok mu? Ekle
                       </Link>
@@ -230,18 +205,12 @@ export default function ExplorePage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat === 'Tümü' ? '' : (cat === activeCategory ? '' : cat))}
-                className="px-4 py-2 rounded-full text-sm whitespace-nowrap font-medium transition-all duration-200 cursor-pointer"
-                style={{
-                  backgroundColor: isActive ? '#C08552' : '#F5EDE4',
-                  color: isActive ? '#FFF8F0' : '#8C5A3C',
-                  boxShadow: isActive ? '0 2px 8px rgba(192,133,82,0.35)' : 'none',
-                }}
-                onMouseEnter={e => {
-                  if (!isActive) e.currentTarget.style.backgroundColor = '#E8DDD1'
-                }}
-                onMouseLeave={e => {
-                  if (!isActive) e.currentTarget.style.backgroundColor = '#F5EDE4'
-                }}
+                className={`px-4 py-2 rounded-full text-sm whitespace-nowrap font-medium transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? 'bg-caramel text-cream'
+                    : 'bg-warmgray-100 text-coffee hover:bg-warmgray-200'
+                }`}
+                style={isActive ? { boxShadow: '0 2px 8px rgba(192,133,82,0.35)' } : undefined}
               >
                 {cat}
               </button>
@@ -251,18 +220,13 @@ export default function ExplorePage() {
 
         {/* Count + city filter */}
         <div className="flex items-center justify-between mb-6 mt-4">
-          <p className="text-sm font-medium" style={{ color: '#9C8E7E' }}>
+          <p className="text-sm font-medium text-warmgray-500">
             {loading ? '…' : `${filtered.length} mekan`}
           </p>
           <select
             value={cityFilter}
             onChange={e => setCityFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg text-sm outline-none transition-colors cursor-pointer"
-            style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #D4C5B5',
-              color: '#4B2E2B',
-            }}
+            className="px-3 py-2 rounded-lg text-sm outline-none transition-colors cursor-pointer bg-white border border-warmgray-300 text-espresso"
           >
             <option value="">Tüm Şehirler</option>
             {cities.map(c => <option key={c} value={c}>{c}</option>)}
@@ -272,25 +236,21 @@ export default function ExplorePage() {
         {/* Grid */}
         {loading ? (
           <div className="flex justify-center py-20">
-            <div
-              className="w-8 h-8 border-2 rounded-full animate-spin"
-              style={{ borderColor: '#C08552', borderTopColor: 'transparent' }}
-            />
+            <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🏛️</div>
-            <p className="text-lg font-medium mb-1" style={{ color: '#8C5A3C' }}>
+            <p className="text-lg font-medium mb-1 text-coffee">
               {places.length === 0 ? 'Henüz mekan eklenmemiş' : 'Sonuç bulunamadı'}
             </p>
-            <p className="text-sm mb-6" style={{ color: '#9C8E7E' }}>
+            <p className="text-sm mb-6 text-warmgray-500">
               {places.length === 0 ? 'İlk mekanı sen ekle!' : 'Farklı bir kategori veya şehir dene.'}
             </p>
             {places.length === 0 && (
               <Link
                 href="/new"
-                className="inline-block px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-200"
-                style={{ backgroundColor: '#C08552', color: '#FFF8F0' }}
+                className="inline-block px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-200 bg-caramel text-cream"
               >
                 Mekan Ekle
               </Link>
@@ -299,82 +259,62 @@ export default function ExplorePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map(place => (
-              <Link
-                key={place.id}
-                href={`/place/${place.slug}`}
-                className="group rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer"
-                style={{
-                  backgroundColor: '#ffffff',
-                  borderColor: '#E8DDD1',
-                  boxShadow: '0 1px 4px rgba(75,46,43,0.06)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(75,46,43,0.12)'
-                  e.currentTarget.style.borderColor = '#D4C5B5'
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.boxShadow = '0 1px 4px rgba(75,46,43,0.06)'
-                  e.currentTarget.style.borderColor = '#E8DDD1'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                }}
-              >
-                {/* Card top gradient */}
-                <div
-                  className="h-40 relative flex items-center justify-center"
-                  style={{ background: CAT_GRADIENT[place.category] ?? DEFAULT_GRADIENT }}
-                >
-                  <span className="text-5xl opacity-30 select-none">
-                    {place.category === 'Kafe' ? '☕' :
-                     place.category === 'Restoran' ? '🍽️' :
-                     place.category === 'Park' ? '🌳' :
-                     place.category === 'Müze' ? '🏛️' :
-                     place.category === 'Sahil/Plaj' ? '🏖️' :
-                     place.category === 'Bar' ? '🍸' :
-                     place.category === 'Teras/Çatı' ? '🌇' :
-                     place.category === 'Doğa/Yürüyüş' ? '🥾' :
-                     place.category === 'Manzara Noktası' ? '🌅' :
-                     place.category === 'Tarihi Mekan' ? '🏯' :
-                     place.category === 'Kütüphane' ? '📚' :
-                     '📍'}
-                  </span>
-                  <span
-                    className="absolute top-3 right-3 text-xs font-semibold px-3 py-1 rounded-full"
-                    style={{ backgroundColor: 'rgba(75,46,43,0.75)', color: '#FFF8F0' }}
+              <Link key={place.id} href={`/place/${place.slug}`}>
+                <Card variant="interactive" className="overflow-hidden">
+                  {/* Card top gradient */}
+                  <div
+                    className="h-40 relative flex items-center justify-center"
+                    style={{ background: CAT_GRADIENT[place.category] ?? DEFAULT_GRADIENT }}
                   >
-                    {place.category}
-                  </span>
-                </div>
-
-                {/* Card body */}
-                <div className="p-5">
-                  <h3
-                    className="font-semibold text-lg leading-snug mb-1 transition-colors duration-200"
-                    style={{ color: '#4B2E2B' }}
-                  >
-                    {place.name}
-                  </h3>
-                  <p className="text-sm mb-4" style={{ color: '#8C5A3C' }}>
-                    📍 {place.city}{place.neighborhood ? `, ${place.neighborhood}` : ''}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    {place.avg_rating !== null ? (
-                      <div className="flex items-center gap-2">
-                        <StarRating value={place.avg_rating} size="sm" />
-                        <span className="text-sm font-bold" style={{ color: '#C08552' }}>
-                          {place.avg_rating}
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-sm italic" style={{ color: '#B8A898' }}>
-                        Henüz değerlendirilmedi
-                      </span>
-                    )}
-                    <span className="text-sm" style={{ color: '#9C8E7E' }}>
-                      {place.review_count} review
+                    <span className="text-5xl opacity-30 select-none">
+                      {place.category === 'Kafe' ? '☕' :
+                       place.category === 'Restoran' ? '🍽️' :
+                       place.category === 'Park' ? '🌳' :
+                       place.category === 'Müze' ? '🏛️' :
+                       place.category === 'Sahil/Plaj' ? '🏖️' :
+                       place.category === 'Bar' ? '🍸' :
+                       place.category === 'Teras/Çatı' ? '🌇' :
+                       place.category === 'Doğa/Yürüyüş' ? '🥾' :
+                       place.category === 'Manzara Noktası' ? '🌅' :
+                       place.category === 'Tarihi Mekan' ? '🏯' :
+                       place.category === 'Kütüphane' ? '📚' :
+                       '📍'}
+                    </span>
+                    <span
+                      className="absolute top-3 right-3 text-xs font-semibold px-3 py-1 rounded-full text-cream"
+                      style={{ backgroundColor: 'rgba(75,46,43,0.75)' }}
+                    >
+                      {place.category}
                     </span>
                   </div>
-                </div>
+
+                  {/* Card body */}
+                  <div className="p-5">
+                    <h3 className="font-semibold text-lg leading-snug mb-1 transition-colors duration-200 text-espresso">
+                      {place.name}
+                    </h3>
+                    <p className="text-sm mb-4 text-coffee">
+                      📍 {place.city}{place.neighborhood ? `, ${place.neighborhood}` : ''}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      {place.avg_rating !== null ? (
+                        <div className="flex items-center gap-2">
+                          <StarRating value={place.avg_rating} size="sm" />
+                          <span className="text-sm font-bold text-caramel">
+                            {place.avg_rating}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-sm italic text-warmgray-400">
+                          Henüz değerlendirilmedi
+                        </span>
+                      )}
+                      <span className="text-sm text-warmgray-500">
+                        {place.review_count} review
+                      </span>
+                    </div>
+                  </div>
+                </Card>
               </Link>
             ))}
           </div>
