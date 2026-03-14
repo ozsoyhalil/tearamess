@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-14T23:33:02.982Z"
+stopped_at: Completed 02-social-graph-02-PLAN.md
+last_updated: "2026-03-14T23:54:43.723Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 13
+  completed_plans: 8
   percent: 0
 ---
 
@@ -57,6 +57,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-foundation P02 | 8min | 2 tasks | 12 files |
 | Phase 01-foundation P03 | 5min | 2 tasks | 4 files |
 | Phase 01-foundation P04 | 6min | 2 tasks | 10 files |
+| Phase 02-social-graph P02 | 1 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: @jest-environment node docblock pattern for Next.js server/edge code tests in jsdom projects
 - [Phase 01-foundation]: type=email inputs in jsdom sanitize invalid values; tests use empty field or valid-prefix approaches for email validation testing
 - [Phase 01-foundation]: z.enum(CATEGORIES, { errorMap }) used for Zod v3 compatibility — message shorthand is v4 only
+- [Phase 02-social-graph]: FeedItem discriminated union uses 'type' literal field — enables item.type === 'review' narrowing without runtime duck-typing
+- [Phase 02-social-graph]: formatRelativeTime uses native Intl.RelativeTimeFormat('tr') — zero new npm deps, no bundle overhead
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-14T23:33:02.971Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-social-graph/02-CONTEXT.md
+Last session: 2026-03-14T23:54:43.721Z
+Stopped at: Completed 02-social-graph-02-PLAN.md
+Resume file: None

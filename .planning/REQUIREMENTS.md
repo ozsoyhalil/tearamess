@@ -21,10 +21,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Social
 
-- [ ] **SOCL-01**: Kullanıcı başka bir kullanıcıyı takip edebilir (tek yönlü)
-- [ ] **SOCL-02**: Kullanıcı kendi takip/takipçi listesini görebilir
-- [ ] **SOCL-03**: Kullanıcı takip ettiklerinin son aktivitelerini (ziyaret, yorum) feed'de görebilir
-- [ ] **SOCL-04**: Kullanıcı başka bir kullanıcının herkese açık profilini, listelerini ve ziyaret geçmişini görebilir
+- [x] **SOCL-01**: Kullanıcı başka bir kullanıcıyı takip edebilir (tek yönlü)
+- [x] **SOCL-02**: Kullanıcı kendi takip/takipçi listesini görebilir
+- [x] **SOCL-03**: Kullanıcı takip ettiklerinin son aktivitelerini (ziyaret, yorum) feed'de görebilir
+- [x] **SOCL-04**: Kullanıcı başka bir kullanıcının herkese açık profilini, listelerini ve ziyaret geçmişini görebilir
 
 ### Lists
 
@@ -86,10 +86,10 @@ Which phases cover which requirements. Validated during roadmap creation.
 | INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 1 | Complete |
-| SOCL-01 | Phase 2 | Pending |
-| SOCL-02 | Phase 2 | Pending |
-| SOCL-03 | Phase 2 | Pending |
-| SOCL-04 | Phase 2 | Pending |
+| SOCL-01 | Phase 2 | Complete |
+| SOCL-02 | Phase 2 | Complete |
+| SOCL-03 | Phase 2 | Complete |
+| SOCL-04 | Phase 2 | Complete |
 | LIST-01 | Phase 3 | Pending |
 | LIST-02 | Phase 3 | Pending |
 | LIST-03 | Phase 3 | Pending |
