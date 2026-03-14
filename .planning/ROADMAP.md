@@ -62,7 +62,15 @@ Plans:
   2. A user can see their own following and follower counts and browse both lists
   3. A user's home feed shows the most recent place visits and reviews from accounts they follow, loading more on scroll
   4. Another user's public profile page shows their bio, visit history, and public lists
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Wave 0: Create failing test stubs for follows, feed, and profiles services
+- [ ] 02-02-PLAN.md — Wave 1: Define type contracts (Follow, Visit, FeedItem) and relativeTime utility
+- [ ] 02-03-PLAN.md — Wave 2: Implement follows, feed, visits services + getProfileByUsername
+- [ ] 02-04-PLAN.md — Wave 3: Build FollowButton, FollowListModal, FeedCard, FeedSkeleton, ProfileLayout components
+- [ ] 02-05-PLAN.md — Wave 4: Wire pages — auth-split home feed, public profile, own profile social counts
+- [ ] 02-06-PLAN.md — Wave 5: Human verification checkpoint for all four SOCL requirements
 
 ### Phase 3: Lists
 **Goal**: Users can curate named lists of places and maintain a one-click wishlist, all visible on their public profile
@@ -105,7 +113,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
 | 1. Foundation | 4/4 | Complete   | 2026-03-14 |
-| 2. Social Graph | 0/? | Not started | - |
+| 2. Social Graph | 0/6 | Not started | - |
 | 3. Lists | 0/? | Not started | - |
 | 4. Check-in + Grid | 0/? | Not started | - |
 | 5. Stats + Coverage | 0/? | Not started | - |
