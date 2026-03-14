@@ -45,7 +45,13 @@ Plans:
   1. A developer adding a new feature cannot call `supabase.from()` directly from a page component — all queries route through `src/lib/services/`
   2. Navigating to a protected page while unauthenticated redirects via middleware before the page renders (no client-side flash)
   3. Any new form in the app submits only validated data — invalid input shows inline error messages without hitting the server
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Install test/form dependencies and create Jest + test stubs (Wave 0)
+- [ ] 01-02-PLAN.md — Create service layer and migrate all page Supabase calls (INFRA-01)
+- [ ] 01-03-PLAN.md — Add middleware auth guard and remove client-side redirect guards (INFRA-02)
+- [ ] 01-04-PLAN.md — Create Zod schemas and migrate all four forms to RHF (INFRA-03)
 
 ### Phase 2: Social Graph
 **Goal**: Users can follow other users, see their public activity, and discover a personalized feed of recent place visits and reviews from people they follow
@@ -98,7 +104,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Social Graph | 0/? | Not started | - |
 | 3. Lists | 0/? | Not started | - |
 | 4. Check-in + Grid | 0/? | Not started | - |
