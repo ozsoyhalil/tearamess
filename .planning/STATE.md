@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation 01-03-PLAN.md
-last_updated: "2026-03-14T22:33:42.668Z"
+stopped_at: Completed 01-foundation 01-04-PLAN.md
+last_updated: "2026-03-14T22:42:22.761Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
   percent: 0
 ---
 
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-foundation P01 | 2 | 2 tasks | 7 files |
 | Phase 01-foundation P02 | 8min | 2 tasks | 12 files |
 | Phase 01-foundation P03 | 5min | 2 tasks | 4 files |
+| Phase 01-foundation P04 | 6min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: Place.neighborhood is optional in canonical type to accommodate partial shapes from searchPlaces
 - [Phase 01-foundation]: getUser() used in middleware (not getSession()) for secure server-side Supabase auth validation
 - [Phase 01-foundation]: @jest-environment node docblock pattern for Next.js server/edge code tests in jsdom projects
+- [Phase 01-foundation]: type=email inputs in jsdom sanitize invalid values; tests use empty field or valid-prefix approaches for email validation testing
+- [Phase 01-foundation]: z.enum(CATEGORIES, { errorMap }) used for Zod v3 compatibility — message shorthand is v4 only
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-14T22:33:42.666Z
-Stopped at: Completed 01-foundation 01-03-PLAN.md
+Last session: 2026-03-14T22:42:22.759Z
+Stopped at: Completed 01-foundation 01-04-PLAN.md
 Resume file: None
