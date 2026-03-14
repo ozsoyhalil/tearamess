@@ -113,7 +113,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
 | 1. Foundation | 4/4 | Complete   | 2026-03-14 |
-| 2. Social Graph | 1/6 | In Progress|  |
+| 2. Social Graph | 2/6 | In Progress|  |
 | 3. Lists | 0/? | Not started | - |
 | 4. Check-in + Grid | 0/? | Not started | - |
 | 5. Stats + Coverage | 0/? | Not started | - |

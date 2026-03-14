@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-social-graph-02-PLAN.md
-last_updated: "2026-03-14T23:54:43.723Z"
+stopped_at: Completed 02-social-graph-01-PLAN.md
+last_updated: "2026-03-14T23:55:18.527Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 13
-  completed_plans: 8
+  completed_plans: 9
   percent: 0
 ---
 
@@ -58,6 +58,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-foundation P03 | 5min | 2 tasks | 4 files |
 | Phase 01-foundation P04 | 6min | 2 tasks | 10 files |
 | Phase 02-social-graph P02 | 1 | 2 tasks | 4 files |
+| Phase 02-social-graph P01 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: z.enum(CATEGORIES, { errorMap }) used for Zod v3 compatibility — message shorthand is v4 only
 - [Phase 02-social-graph]: FeedItem discriminated union uses 'type' literal field — enables item.type === 'review' narrowing without runtime duck-typing
 - [Phase 02-social-graph]: formatRelativeTime uses native Intl.RelativeTimeFormat('tr') — zero new npm deps, no bundle overhead
+- [Phase 02-social-graph]: profiles.test.ts created as new file (not extended) — it did not exist prior to Plan 02-01
+- [Phase 02-social-graph]: Wave 0 TDD stub pattern: test files created before implementation exists — failing on Cannot find module establishes RED baseline
 
 ### Pending Todos
 
@@ -98,6 +101,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-14T23:54:43.721Z
-Stopped at: Completed 02-social-graph-02-PLAN.md
+Last session: 2026-03-14T23:55:18.525Z
+Stopped at: Completed 02-social-graph-01-PLAN.md
 Resume file: None
