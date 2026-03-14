@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Completed 01-foundation 01-04-PLAN.md
-last_updated: "2026-03-14T22:42:22.761Z"
+last_updated: "2026-03-14T23:00:59.124Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
