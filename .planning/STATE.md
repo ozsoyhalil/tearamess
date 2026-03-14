@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation 01-02-PLAN.md
-last_updated: "2026-03-14T22:30:10.152Z"
+stopped_at: Completed 01-foundation 01-03-PLAN.md
+last_updated: "2026-03-14T22:33:42.668Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
   percent: 0
 ---
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 00-polish-bugfix P03 | 15min | 3 tasks | 9 files |
 | Phase 01-foundation P01 | 2 | 2 tasks | 7 files |
 | Phase 01-foundation P02 | 8min | 2 tasks | 12 files |
+| Phase 01-foundation P03 | 5min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: zod pinned to ^3.x explicitly — zod@latest resolves to v4 with @hookform/resolvers TypeScript incompatibilities as of March 2026
 - [Phase 01-foundation]: Service layer uses typed mock helper pattern (jest.MockedFunction<any>) for TypeScript5/jest30 compatibility in test files
 - [Phase 01-foundation]: Place.neighborhood is optional in canonical type to accommodate partial shapes from searchPlaces
+- [Phase 01-foundation]: getUser() used in middleware (not getSession()) for secure server-side Supabase auth validation
+- [Phase 01-foundation]: @jest-environment node docblock pattern for Next.js server/edge code tests in jsdom projects
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-14T22:30:10.150Z
-Stopped at: Completed 01-foundation 01-02-PLAN.md
+Last session: 2026-03-14T22:33:42.666Z
+Stopped at: Completed 01-foundation 01-03-PLAN.md
 Resume file: None

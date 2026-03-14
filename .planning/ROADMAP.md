@@ -104,7 +104,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
-| 1. Foundation | 2/4 | In Progress|  |
+| 1. Foundation | 3/4 | In Progress|  |
 | 2. Social Graph | 0/? | Not started | - |
 | 3. Lists | 0/? | Not started | - |
 | 4. Check-in + Grid | 0/? | Not started | - |
