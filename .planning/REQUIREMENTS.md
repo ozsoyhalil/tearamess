@@ -15,9 +15,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Service layer `src/lib/services/` oluşturulur ve mevcut inline Supabase sorguları buraya taşınır
-- [ ] **INFRA-02**: `middleware.ts` ile server-side auth koruması uygulanır, client-side yönlendirmeler kaldırılır
-- [ ] **INFRA-03**: Tüm yeni formlar Zod şema doğrulaması ve React Hook Form ile yazılır
+- [x] **INFRA-01**: Service layer `src/lib/services/` oluşturulur ve mevcut inline Supabase sorguları buraya taşınır
+- [x] **INFRA-02**: `middleware.ts` ile server-side auth koruması uygulanır, client-side yönlendirmeler kaldırılır
+- [x] **INFRA-03**: Tüm yeni formlar Zod şema doğrulaması ve React Hook Form ile yazılır
 
 ### Social
 
@@ -83,9 +83,9 @@ Which phases cover which requirements. Validated during roadmap creation.
 | PLSH-01 | Phase 0 | Complete |
 | PLSH-02 | Phase 0 | Complete |
 | PLSH-03 | Phase 0 | Complete |
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 1 | Pending |
+| INFRA-01 | Phase 1 | Complete |
+| INFRA-02 | Phase 1 | Complete |
+| INFRA-03 | Phase 1 | Complete |
 | SOCL-01 | Phase 2 | Pending |
 | SOCL-02 | Phase 2 | Pending |
 | SOCL-03 | Phase 2 | Pending |
