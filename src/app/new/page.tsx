@@ -84,11 +84,6 @@ export default function NewPlacePage() {
     )
   }
 
-  if (!user) {
-    router.push('/auth/login')
-    return null
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -96,6 +91,7 @@ export default function NewPlacePage() {
       setError('Mekan adı, kategori ve şehir zorunludur.')
       return
     }
+    if (!user) return
     setSubmitting(true)
     const slug = `${toSlug(form.name)}-${Date.now()}`
     const { error: insertError } = await createPlace({
