@@ -15,6 +15,7 @@ const config: Config = {
   },
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
   passWithNoTests: true,
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 }
 
 export default config

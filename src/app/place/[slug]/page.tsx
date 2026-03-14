@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
@@ -10,6 +12,7 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { getPlaceBySlug } from '@/lib/services/places'
 import { getReviewsForPlace, createReview } from '@/lib/services/reviews'
+import { reviewSchema, ReviewInput } from '@/lib/schemas/reviews'
 import { useAuth } from '@/context/AuthContext'
 import type { Review } from '@/types/review'
 import type { Place } from '@/types/place'
@@ -32,11 +35,22 @@ export default function PlacePage() {
   const [avgRating, setAvgRating] = useState<number | null>(null)
   const [pageLoading, setPageLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
-
-  const [form, setForm] = useState({ rating: 0, content: '', visit_date: '' })
-  const [formError, setFormError] = useState('')
-  const [submitting, setSubmitting] = useState(false)
   const [alreadyReviewed, setAlreadyReviewed] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<ReviewInput>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: { rating: 0 },
+  })
+
+  const ratingValue = watch('rating')
 
   const fetchReviews = async (placeId: string) => {
     const { data, error } = await getReviewsForPlace(placeId)
@@ -71,25 +85,22 @@ export default function PlacePage() {
     if (place && user) setAlreadyReviewed(reviews.some(r => r.user_id === user.id))
   }, [user, reviews])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setFormError('')
-    if (!user) { setFormError('Yorum yazmak için giriş yapmalısın.'); return }
-    if (form.rating === 0) { setFormError('Lütfen bir puan ver.'); return }
-    setSubmitting(true)
-
+  const onSubmit = async (values: ReviewInput) => {
+    if (!user) return
     const { error } = await createReview({
       place_id: place!.id,
       user_id: user.id,
-      rating: form.rating,
-      content: form.content || null,
-      visit_date: form.visit_date || null,
+      rating: values.rating,
+      content: values.content || null,
+      visit_date: values.visit_date || null,
     })
 
-    if (error) { setFormError(error); setSubmitting(false); return }
-    setForm({ rating: 0, content: '', visit_date: '' })
+    if (error) {
+      setError('root', { message: error })
+      return
+    }
+    reset({ rating: 0, content: '', visit_date: '' })
     await fetchReviews(place!.id)
-    setSubmitting(false)
   }
 
   if (pageLoading) {
@@ -183,7 +194,7 @@ export default function PlacePage() {
             </Card>
           ) : (
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               className="rounded-2xl p-6 border border-warmgray-200 bg-white space-y-5"
               style={{ boxShadow: '0 2px 12px rgba(75,46,43,0.07)' }}
             >
@@ -192,38 +203,41 @@ export default function PlacePage() {
                   Puan *
                 </label>
                 <StarRating
-                  value={form.rating}
-                  onChange={(v) => setForm(prev => ({ ...prev, rating: v }))}
+                  value={ratingValue}
+                  onChange={(v) => setValue('rating', v, { shouldValidate: true })}
                   size="lg"
                 />
+                {errors.rating && (
+                  <p className="text-sm text-red-400 mt-1">{errors.rating.message}</p>
+                )}
               </div>
 
               <Textarea
                 label="Yorum"
                 id="content"
-                value={form.content}
-                onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))}
+                {...register('content')}
                 rows={3}
                 placeholder="Bu mekan hakkında ne düşünüyorsun?"
+                error={errors.content?.message}
               />
 
               <Input
                 type="date"
                 label="Ziyaret Tarihi"
                 id="visit_date"
-                value={form.visit_date}
-                onChange={e => setForm(prev => ({ ...prev, visit_date: e.target.value }))}
+                {...register('visit_date')}
                 className="w-auto"
+                error={errors.visit_date?.message}
               />
 
-              {formError && <p className="text-sm text-red-400">{formError}</p>}
+              {errors.root && <p className="text-sm text-red-400">{errors.root.message}</p>}
 
               <button
                 type="submit"
-                disabled={submitting || form.rating === 0}
+                disabled={isSubmitting || ratingValue === 0}
                 className="px-7 py-3 rounded-xl font-bold text-sm transition-all duration-200 bg-caramel text-cream hover:bg-caramel-dark disabled:bg-warmgray-300 disabled:cursor-not-allowed"
               >
-                {submitting ? 'Gönderiliyor…' : 'Gönder'}
+                {isSubmitting ? 'Gönderiliyor…' : 'Gönder'}
               </button>
             </form>
           )}

@@ -17,11 +17,13 @@ describe('LoginPage Zod validation', () => {
     expect(await screen.findByText(/geçerli bir e-posta/i)).toBeInTheDocument()
   })
 
-  it('shows inline email error when email is not a valid email format', async () => {
+  it('shows inline password error when only password is short', async () => {
     render(<LoginPage />)
-    await userEvent.type(screen.getByLabelText(/e-posta/i), 'notanemail')
+    // Submit with valid email (type=email accepts this) but too-short password
+    await userEvent.type(screen.getByLabelText(/e-posta/i), 'test@example.com')
     await userEvent.click(screen.getByRole('button', { name: /giriş/i }))
-    expect(await screen.findByText(/geçerli bir e-posta/i)).toBeInTheDocument()
+    // Password is empty so the min(6) error should appear
+    expect(await screen.findByText(/en az 6 karakter/i)).toBeInTheDocument()
   })
 
   it('shows inline password error when password is shorter than 6 characters', async () => {

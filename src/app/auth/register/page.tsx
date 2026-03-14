@@ -1,48 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { signUp } from '@/lib/services/auth'
+import { registerSchema, RegisterInput } from '@/lib/schemas/auth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Input } from '@/components/ui/Input'
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [displayName, setDisplayName] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+  })
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-
-    if (username.length < 3) {
-      setError('Kullanıcı adı en az 3 karakter olmalı.')
-      setLoading(false)
-      return
-    }
-
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username,
-          display_name: displayName || username,
-        },
-      },
+  const onSubmit = async (values: RegisterInput) => {
+    const { error } = await signUp(values.email, values.password, {
+      username: values.username,
+      display_name: values.displayName || values.username,
     })
-
-    if (signUpError) {
-      setError(signUpError.message)
-      setLoading(false)
+    if (error) {
+      setError('root', { message: error })
       return
     }
-
     router.push('/')
   }
 
@@ -66,58 +51,54 @@ export default function RegisterPage() {
           className="rounded-2xl p-8 border bg-white border-warmgray-200 shadow-sm"
           style={{ boxShadow: '0 4px 24px rgba(75,46,43,0.09)' }}
         >
-          <form onSubmit={handleRegister} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               type="text"
               label="Kullanıcı Adı"
               id="username"
-              value={username}
-              onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+              {...register('username')}
               placeholder="kullaniciadi"
-              required
+              error={errors.username?.message}
             />
 
             <Input
               type="text"
               label="Görünen Ad"
               id="displayName"
-              value={displayName}
-              onChange={e => setDisplayName(e.target.value)}
+              {...register('displayName')}
               placeholder="Adın Soyadın"
+              error={errors.displayName?.message}
             />
 
             <Input
               type="email"
               label="E-posta"
               id="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              {...register('email')}
               placeholder="ornek@email.com"
-              required
+              error={errors.email?.message}
             />
 
             <Input
               type="password"
               label="Şifre"
               id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
+              {...register('password')}
               placeholder="En az 6 karakter"
-              required
-              minLength={6}
+              error={errors.password?.message}
             />
 
-            {error && (
-              <p className="text-sm text-red-400">{error}</p>
+            {errors.root && (
+              <p className="text-sm text-red-400">{errors.root.message}</p>
             )}
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="w-full py-3 rounded-xl font-semibold transition-all duration-200 bg-caramel text-cream hover:bg-caramel-dark disabled:bg-warmgray-300 disabled:cursor-not-allowed"
-              style={{ boxShadow: loading ? 'none' : '0 4px 14px rgba(192,133,82,0.35)' }}
+              style={{ boxShadow: isSubmitting ? 'none' : '0 4px 14px rgba(192,133,82,0.35)' }}
             >
-              {loading ? 'Kayıt yapılıyor…' : 'Kayıt Ol'}
+              {isSubmitting ? 'Kayıt yapılıyor…' : 'Kayıt Ol'}
             </button>
           </form>
         </div>

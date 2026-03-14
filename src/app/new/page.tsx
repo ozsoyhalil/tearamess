@@ -1,19 +1,16 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { createPlace } from '@/lib/services/places'
+import { newPlaceSchema, NewPlaceInput } from '@/lib/schemas/places'
 import { useAuth } from '@/context/AuthContext'
-
-const CATEGORIES = [
-  'Kafe', 'Restoran', 'Park', 'Müze', 'Sahil/Plaj',
-  'Sokak/Cadde', 'Kütüphane', 'Bar', 'Teras/Çatı',
-  'Köy/Kasaba', 'Doğa/Yürüyüş', 'Manzara Noktası', 'Tarihi Mekan', 'Diğer',
-]
 
 const TR_CITIES = [
   'Adana', 'Adıyaman', 'Afyonkarahisar', 'Ağrı', 'Aksaray', 'Amasya', 'Ankara', 'Antalya',
@@ -42,9 +39,15 @@ export default function NewPlacePage() {
   const { user, loading } = useAuth()
   const router = useRouter()
 
-  const [form, setForm] = useState({ name: '', category: '', city: '', neighborhood: '', description: '' })
-  const [error, setError] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<NewPlaceInput>({
+    resolver: zodResolver(newPlaceSchema),
+  })
 
   const [cityInput, setCityInput] = useState('')
   const [citySuggestions, setCitySuggestions] = useState<string[]>([])
@@ -53,7 +56,7 @@ export default function NewPlacePage() {
 
   const handleCityChange = (val: string) => {
     setCityInput(val)
-    setForm(prev => ({ ...prev, city: val }))
+    setValue('city', val, { shouldValidate: false })
     if (val.length >= 1) {
       const matches = TR_CITIES.filter(c =>
         c.toLowerCase().startsWith(val.toLowerCase()) ||
@@ -69,7 +72,7 @@ export default function NewPlacePage() {
 
   const selectCity = (city: string) => {
     setCityInput(city)
-    setForm(prev => ({ ...prev, city }))
+    setValue('city', city, { shouldValidate: true })
     setShowCitySuggestions(false)
   }
 
@@ -84,26 +87,22 @@ export default function NewPlacePage() {
     )
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    if (!form.name || !form.category || !form.city) {
-      setError('Mekan adı, kategori ve şehir zorunludur.')
-      return
-    }
+  const onSubmit = async (values: NewPlaceInput) => {
     if (!user) return
-    setSubmitting(true)
-    const slug = `${toSlug(form.name)}-${Date.now()}`
+    const slug = `${toSlug(values.name)}-${Date.now()}`
     const { error: insertError } = await createPlace({
-      name: form.name,
+      name: values.name,
       slug,
-      category: form.category,
-      city: form.city,
-      neighborhood: form.neighborhood || undefined,
-      description: form.description || undefined,
+      category: values.category,
+      city: values.city,
+      neighborhood: values.neighborhood || undefined,
+      description: values.description || undefined,
       created_by: user.id,
     })
-    if (insertError) { setError(insertError); setSubmitting(false); return }
+    if (insertError) {
+      setError('root', { message: insertError })
+      return
+    }
     router.push(`/place/${slug}`)
   }
 
@@ -115,15 +114,14 @@ export default function NewPlacePage() {
         <p className="mb-8 text-coffee">Keşfettiğin bir yeri topluluğa tanıt.</p>
 
         <Card variant="default" className="p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Name */}
             <Input
               label="Mekan Adı *"
               id="name"
-              value={form.name}
-              onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+              {...register('name')}
               placeholder="Örn: Bebek Sahili"
-              required
+              error={errors.name?.message}
             />
 
             {/* Category */}
@@ -133,14 +131,19 @@ export default function NewPlacePage() {
               </label>
               <select
                 id="category"
-                value={form.category}
-                onChange={e => setForm(prev => ({ ...prev, category: e.target.value }))}
-                required
+                {...register('category')}
                 className="w-full px-4 py-3 rounded-xl bg-warmgray-100 text-espresso text-sm border outline-none focus:ring-2 focus:ring-caramel focus:border-caramel transition-all duration-200 border-warmgray-300 cursor-pointer"
               >
                 <option value="" disabled>Kategori seç…</option>
-                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                {(['Kafe', 'Restoran', 'Park', 'Müze', 'Sahil/Plaj',
+                  'Sokak/Cadde', 'Kütüphane', 'Bar', 'Teras/Çatı',
+                  'Köy/Kasaba', 'Doğa/Yürüyüş', 'Manzara Noktası', 'Tarihi Mekan', 'Diğer'] as const).map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
               </select>
+              {errors.category && (
+                <p className="text-sm text-red-400 mt-1">{errors.category.message}</p>
+              )}
             </div>
 
             {/* City + Neighborhood */}
@@ -156,7 +159,6 @@ export default function NewPlacePage() {
                     onChange={e => handleCityChange(e.target.value)}
                     onBlur={() => setTimeout(() => setShowCitySuggestions(false), 150)}
                     placeholder="İstanbul"
-                    required
                     autoComplete="off"
                     className="w-full px-4 py-3 rounded-xl bg-warmgray-100 text-espresso text-sm border outline-none placeholder:text-warmgray-400 focus:ring-2 focus:ring-caramel focus:border-caramel transition-all duration-200 border-warmgray-300"
                   />
@@ -175,13 +177,16 @@ export default function NewPlacePage() {
                     </div>
                   )}
                 </div>
+                {errors.city && (
+                  <p className="text-sm text-red-400 mt-1">{errors.city.message}</p>
+                )}
               </div>
               <Input
                 label="Semt"
                 id="neighborhood"
-                value={form.neighborhood}
-                onChange={e => setForm(prev => ({ ...prev, neighborhood: e.target.value }))}
+                {...register('neighborhood')}
                 placeholder="Beyoğlu"
+                error={errors.neighborhood?.message}
               />
             </div>
 
@@ -189,21 +194,21 @@ export default function NewPlacePage() {
             <Textarea
               label="Açıklama"
               id="description"
-              value={form.description}
-              onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
+              {...register('description')}
               rows={4}
               placeholder="Bu mekanı özel kılan ne? Deneyimini anlat…"
+              error={errors.description?.message}
             />
 
-            {error && <p className="text-sm text-red-400">{error}</p>}
+            {errors.root && <p className="text-sm text-red-400">{errors.root.message}</p>}
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={isSubmitting}
               className="w-full py-3 rounded-xl font-semibold text-lg transition-all duration-200 bg-caramel text-cream hover:bg-caramel-dark disabled:bg-warmgray-300 disabled:cursor-not-allowed"
-              style={{ boxShadow: submitting ? 'none' : '0 4px 14px rgba(192,133,82,0.35)' }}
+              style={{ boxShadow: isSubmitting ? 'none' : '0 4px 14px rgba(192,133,82,0.35)' }}
             >
-              {submitting ? 'Ekleniyor…' : 'Mekanı Ekle'}
+              {isSubmitting ? 'Ekleniyor…' : 'Mekanı Ekle'}
             </button>
           </form>
         </Card>
