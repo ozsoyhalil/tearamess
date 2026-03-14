@@ -48,7 +48,6 @@ created: 2026-03-15
 | 1-01-03 | 01 | 1 | INFRA-01 | lint | `grep -r "supabase.from" src/app/ \| wc -l` (expect 0) | N/A | ⬜ pending |
 | 1-02-01 | 02 | 1 | INFRA-02 | integration | `npx jest src/middleware.test.ts -x` | ❌ W0 | ⬜ pending |
 | 1-03-01 | 03 | 2 | INFRA-03 | unit | `npx jest src/app/auth/login/page.test.tsx -x` | ❌ W0 | ⬜ pending |
-| 1-03-02 | 03 | 2 | INFRA-03 | unit | `npx jest src/app/new/page.test.tsx -x` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
