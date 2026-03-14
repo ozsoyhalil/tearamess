@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { supabase } from '@/lib/supabase'
+import { createPlace } from '@/lib/services/places'
 import { useAuth } from '@/context/AuthContext'
 
 const CATEGORIES = [
@@ -98,16 +98,16 @@ export default function NewPlacePage() {
     }
     setSubmitting(true)
     const slug = `${toSlug(form.name)}-${Date.now()}`
-    const { error: insertError } = await supabase.from('places').insert({
+    const { error: insertError } = await createPlace({
       name: form.name,
       slug,
       category: form.category,
       city: form.city,
-      neighborhood: form.neighborhood || null,
-      description: form.description || null,
+      neighborhood: form.neighborhood || undefined,
+      description: form.description || undefined,
       created_by: user.id,
     })
-    if (insertError) { setError(insertError.message); setSubmitting(false); return }
+    if (insertError) { setError(insertError); setSubmitting(false); return }
     router.push(`/place/${slug}`)
   }
 

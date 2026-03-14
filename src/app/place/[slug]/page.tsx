@@ -8,21 +8,11 @@ import StarRating from '@/components/StarRating'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { supabase } from '@/lib/supabase'
+import { getPlaceBySlug } from '@/lib/services/places'
+import { getReviewsForPlace, createReview } from '@/lib/services/reviews'
 import { useAuth } from '@/context/AuthContext'
 import type { Review } from '@/types/review'
-
-type Place = {
-  id: string
-  name: string
-  slug: string
-  category: string
-  city: string
-  neighborhood: string | null
-  description: string | null
-  created_by: string
-  created_at: string
-}
+import type { Place } from '@/types/place'
 
 function ratingLabel(r: number) {
   if (r >= 4.5) return 'Muhteşem'
@@ -49,32 +39,25 @@ export default function PlacePage() {
   const [alreadyReviewed, setAlreadyReviewed] = useState(false)
 
   const fetchReviews = async (placeId: string) => {
-    const { data } = await supabase
-      .from('reviews')
-      .select('*, profiles(username, display_name)')
-      .eq('place_id', placeId)
-      .order('created_at', { ascending: false })
+    const { data, error } = await getReviewsForPlace(placeId)
 
-    const list = (data ?? []) as Review[]
-    setReviews(list)
+    if (error || !data) return
 
-    if (list.length > 0) {
-      const avg = Math.round(list.reduce((s, r) => s + r.rating, 0) / list.length * 2) / 2
+    setReviews(data)
+
+    if (data.length > 0) {
+      const avg = Math.round(data.reduce((s, r) => s + r.rating, 0) / data.length * 2) / 2
       setAvgRating(avg)
     } else {
       setAvgRating(null)
     }
 
-    if (user) setAlreadyReviewed(list.some(r => r.user_id === user.id))
+    if (user) setAlreadyReviewed(data.some(r => r.user_id === user.id))
   }
 
   useEffect(() => {
     const load = async () => {
-      const { data, error } = await supabase
-        .from('places')
-        .select('*')
-        .eq('slug', slug)
-        .single()
+      const { data, error } = await getPlaceBySlug(slug)
 
       if (error || !data) { setNotFound(true); setPageLoading(false); return }
       setPlace(data)
@@ -95,7 +78,7 @@ export default function PlacePage() {
     if (form.rating === 0) { setFormError('Lütfen bir puan ver.'); return }
     setSubmitting(true)
 
-    const { error } = await supabase.from('reviews').insert({
+    const { error } = await createReview({
       place_id: place!.id,
       user_id: user.id,
       rating: form.rating,
@@ -103,7 +86,7 @@ export default function PlacePage() {
       visit_date: form.visit_date || null,
     })
 
-    if (error) { setFormError(error.message); setSubmitting(false); return }
+    if (error) { setFormError(error); setSubmitting(false); return }
     setForm({ rating: 0, content: '', visit_date: '' })
     await fetchReviews(place!.id)
     setSubmitting(false)
@@ -189,7 +172,7 @@ export default function PlacePage() {
 
           {!user ? (
             <Card variant="default" className="p-6 text-sm text-warmgray-500">
-              Değerlendirmek için{' '}
+              Yorum yazmak için{' '}
               <Link href="/auth/login" className="font-semibold text-caramel">
                 giriş yap
               </Link>.

@@ -2,49 +2,44 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import StarRating from '@/components/StarRating'
 import { Card } from '@/components/ui/Card'
-import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
-
-type Place = {
-  id: string; name: string; slug: string
-  category: string; city: string; created_at: string
-}
-
-type Review = {
-  id: string; rating: number; content: string | null
-  visit_date: string | null; created_at: string
-  places: { name: string; slug: string; category: string; city: string } | null
-}
+import { getProfileByUserId } from '@/lib/services/profiles'
+import { getUserReviews } from '@/lib/services/reviews'
+import { getPlaces } from '@/lib/services/places'
+import type { Place } from '@/types/place'
+import type { Profile } from '@/types/profile'
+import type { Review } from '@/types/review'
 
 type Tab = 'reviews' | 'places'
 
 export default function ProfilePage() {
   const { user, loading } = useAuth()
-  const router = useRouter()
 
   const [places, setPlaces] = useState<Place[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
   const [dataLoading, setDataLoading] = useState(true)
-  const [profile, setProfile] = useState<{ username: string; display_name: string | null } | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [tab, setTab] = useState<Tab>('reviews')
 
   useEffect(() => {
     if (loading) return
-    if (!user) { router.push('/auth/login'); return }
+    if (!user) return
 
     const fetchData = async () => {
       const [profileRes, placesRes, reviewsRes] = await Promise.all([
-        supabase.from('profiles').select('username, display_name').eq('id', user.id).single(),
-        supabase.from('places').select('id, name, slug, category, city, created_at').eq('created_by', user.id).order('created_at', { ascending: false }),
-        supabase.from('reviews').select('id, rating, content, visit_date, created_at, places(name, slug, category, city)').eq('user_id', user.id).order('created_at', { ascending: false }),
+        getProfileByUserId(user.id),
+        getPlaces(undefined, undefined),
+        getUserReviews(user.id),
       ])
       if (profileRes.data) setProfile(profileRes.data)
-      if (placesRes.data) setPlaces(placesRes.data)
-      if (reviewsRes.data) setReviews(reviewsRes.data as unknown as Review[])
+      if (placesRes.data) {
+        // Filter to only places created by this user
+        setPlaces(placesRes.data.filter(p => p.created_by === user.id))
+      }
+      if (reviewsRes.data) setReviews(reviewsRes.data as Review[])
       setDataLoading(false)
     }
     fetchData()
@@ -166,47 +161,50 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-3">
             {reviews.length === 0 ? (
               <p className="text-sm text-warmgray-400">Henüz review yazmamışsın.</p>
-            ) : reviews.map(review => (
-              <Card
-                key={review.id}
-                variant="default"
-                className="p-5 hover:border-warmgray-300 hover:shadow-md transition-all duration-200"
-              >
-                <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
-                  <div>
-                    {review.places ? (
-                      <Link
-                        href={`/place/${review.places.slug}`}
-                        className="font-semibold transition-colors text-espresso hover:text-caramel"
-                      >
-                        {review.places.name}
-                      </Link>
-                    ) : (
-                      <span className="text-warmgray-400 font-semibold">Mekan silindi</span>
-                    )}
-                    {review.places && (
-                      <p className="text-xs mt-0.5">
-                        <span className="text-caramel font-semibold">{review.places.category}</span>
-                        <span className="text-warmgray-500"> · {review.places.city}</span>
-                      </p>
-                    )}
-                  </div>
-                  <div className="text-right">
-                    <StarRating value={review.rating} size="sm" />
-                    <div className="text-xs mt-0.5 text-warmgray-400">
-                      {review.visit_date
-                        ? `Ziyaret: ${review.visit_date}`
-                        : new Date(review.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
+            ) : reviews.map(review => {
+              const reviewPlaces = review as Review & { places?: { name: string; slug: string; category: string; city: string } | null }
+              return (
+                <Card
+                  key={review.id}
+                  variant="default"
+                  className="p-5 hover:border-warmgray-300 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
+                    <div>
+                      {reviewPlaces.places ? (
+                        <Link
+                          href={`/place/${reviewPlaces.places.slug}`}
+                          className="font-semibold transition-colors text-espresso hover:text-caramel"
+                        >
+                          {reviewPlaces.places.name}
+                        </Link>
+                      ) : (
+                        <span className="text-warmgray-400 font-semibold">Mekan silindi</span>
+                      )}
+                      {reviewPlaces.places && (
+                        <p className="text-xs mt-0.5">
+                          <span className="text-caramel font-semibold">{reviewPlaces.places.category}</span>
+                          <span className="text-warmgray-500"> · {reviewPlaces.places.city}</span>
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <StarRating value={review.rating} size="sm" />
+                      <div className="text-xs mt-0.5 text-warmgray-400">
+                        {review.visit_date
+                          ? `Ziyaret: ${review.visit_date}`
+                          : new Date(review.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </div>
                     </div>
                   </div>
-                </div>
-                {review.content && (
-                  <p className="text-sm leading-relaxed pt-2 mt-1 border-t border-warmgray-100 text-coffee">
-                    {review.content}
-                  </p>
-                )}
-              </Card>
-            ))}
+                  {review.content && (
+                    <p className="text-sm leading-relaxed pt-2 mt-1 border-t border-warmgray-100 text-coffee">
+                      {review.content}
+                    </p>
+                  )}
+                </Card>
+              )
+            })}
           </div>
         )}
 
@@ -231,9 +229,11 @@ export default function ProfilePage() {
                       </span>
                       <h3 className="font-semibold mb-0.5 text-espresso">{place.name}</h3>
                       <p className="text-sm text-warmgray-500">{place.city}</p>
-                      <p className="text-xs mt-2 text-warmgray-400">
-                        {new Date(place.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </p>
+                      {place.created_at && (
+                        <p className="text-xs mt-2 text-warmgray-400">
+                          {new Date(place.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        </p>
+                      )}
                     </Card>
                   </Link>
                 ))}

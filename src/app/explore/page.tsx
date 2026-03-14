@@ -6,7 +6,8 @@ import Navbar from '@/components/Navbar'
 import StarRating from '@/components/StarRating'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
-import { supabase } from '@/lib/supabase'
+import { getPlaces, searchPlaces } from '@/lib/services/places'
+import type { Place } from '@/types/place'
 
 const CATEGORIES = [
   'Kafe', 'Restoran', 'Park', 'Müze', 'Sahil/Plaj',
@@ -27,17 +28,6 @@ const CAT_GRADIENT: Record<string, string> = {
 }
 
 const DEFAULT_GRADIENT = 'linear-gradient(135deg, #F5EDE4 0%, #E8DDD1 100%)'
-
-type Place = {
-  id: string
-  name: string
-  slug: string
-  category: string
-  city: string
-  neighborhood: string | null
-  avg_rating: number | null
-  review_count: number
-}
 
 type SearchHit = {
   id: string
@@ -62,23 +52,11 @@ export default function ExplorePage() {
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase
-        .from('places')
-        .select('id, name, slug, category, city, neighborhood, reviews(rating)')
-        .order('created_at', { ascending: false })
-
+      const { data } = await getPlaces()
       if (!data) { setLoading(false); return }
 
-      const mapped: Place[] = data.map((p: { id: string; name: string; slug: string; category: string; city: string; neighborhood: string | null; reviews: { rating: number }[] }) => {
-        const rs = p.reviews ?? []
-        const avg = rs.length > 0
-          ? Math.round(rs.reduce((s, r) => s + r.rating, 0) / rs.length * 2) / 2
-          : null
-        return { id: p.id, name: p.name, slug: p.slug, category: p.category, city: p.city, neighborhood: p.neighborhood, avg_rating: avg, review_count: rs.length }
-      })
-
-      setPlaces(mapped)
-      setCities([...new Set(mapped.map(p => p.city))].sort())
+      setPlaces(data)
+      setCities([...new Set(data.map(p => p.city))].sort())
       setLoading(false)
     }
     load()
@@ -88,11 +66,7 @@ export default function ExplorePage() {
     if (!query.trim()) { setHits([]); setShowDrop(false); return }
     const t = setTimeout(async () => {
       setSearchLoading(true)
-      const { data } = await supabase
-        .from('places')
-        .select('id, name, slug, category, city')
-        .ilike('name', `%${query}%`)
-        .limit(8)
+      const { data } = await searchPlaces(query)
       setHits(data ?? [])
       setShowDrop(true)
       setSearchLoading(false)
@@ -297,7 +271,7 @@ export default function ExplorePage() {
                       📍 {place.city}{place.neighborhood ? `, ${place.neighborhood}` : ''}
                     </p>
                     <div className="flex items-center justify-between">
-                      {place.avg_rating !== null ? (
+                      {place.avg_rating !== null && place.avg_rating !== undefined ? (
                         <div className="flex items-center gap-2">
                           <StarRating value={place.avg_rating} size="sm" />
                           <span className="text-sm font-bold text-caramel">
@@ -310,7 +284,7 @@ export default function ExplorePage() {
                         </span>
                       )}
                       <span className="text-sm text-warmgray-500">
-                        {place.review_count} review
+                        {place.review_count ?? 0} review
                       </span>
                     </div>
                   </div>
