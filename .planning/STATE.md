@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-social-graph-01-PLAN.md
-last_updated: "2026-03-14T23:55:18.527Z"
+stopped_at: Completed 02-social-graph-03-PLAN.md
+last_updated: "2026-03-17T07:46:51.132Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 13
-  completed_plans: 9
+  completed_plans: 10
   percent: 0
 ---
 
@@ -59,6 +59,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-foundation P04 | 6min | 2 tasks | 10 files |
 | Phase 02-social-graph P02 | 1 | 2 tasks | 4 files |
 | Phase 02-social-graph P01 | 2min | 2 tasks | 3 files |
+| Phase 02-social-graph P03 | 9min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,9 @@ Recent decisions affecting current work:
 - [Phase 02-social-graph]: formatRelativeTime uses native Intl.RelativeTimeFormat('tr') — zero new npm deps, no bundle overhead
 - [Phase 02-social-graph]: profiles.test.ts created as new file (not extended) — it did not exist prior to Plan 02-01
 - [Phase 02-social-graph]: Wave 0 TDD stub pattern: test files created before implementation exists — failing on Cannot find module establishes RED baseline
+- [Phase 02-social-graph]: Two-query approach in getFeed: parallel Promise.all for reviews+visits after follows lookup, cursor via .lt('created_at', cursor)
+- [Phase 02-social-graph]: recordVisit fires and forgets in createReview — visit error never bubbles to review caller
+- [Phase 02-social-graph]: feed.test.ts stubs fixed to use mockReturnValueOnce per query for two-query implementation compatibility
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-14T23:55:18.525Z
-Stopped at: Completed 02-social-graph-01-PLAN.md
+Last session: 2026-03-17T07:46:51.130Z
+Stopped at: Completed 02-social-graph-03-PLAN.md
 Resume file: None
