@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import type { Review } from '@/types/review'
+import { recordVisit } from './visits'
 
 export async function getReviewsForPlace(
   placeId: string
@@ -23,6 +24,10 @@ export async function createReview(payload: {
 }): Promise<{ data: null; error: string | null }> {
   const { error } = await supabase.from('reviews').insert(payload)
   if (error) return { data: null, error: error.message }
+
+  // Auto-record a visit when a review is created — silent failure is acceptable
+  recordVisit(payload.user_id, payload.place_id).catch(() => {})
+
   return { data: null, error: null }
 }
 

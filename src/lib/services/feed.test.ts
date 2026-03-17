@@ -37,33 +37,64 @@ describe('getFeed', () => {
   })
 
   it('returns FeedItem[] sorted by created_at descending when user follows others', async () => {
-    const feedItems = [
+    const followIds = [{ following_id: 'u1' }, { following_id: 'u2' }]
+    const reviewItems = [
       {
-        id: 'item-2',
-        type: 'review' as const,
+        id: 'review-1',
         user_id: 'u2',
         place_id: 'p1',
+        rating: 4,
+        content: 'Nice place',
         created_at: '2024-02-01T12:00:00Z',
+        profiles: { username: 'alice', display_name: 'Alice', avatar_url: null },
+        places: { id: 'p1', name: 'Cafe', slug: 'cafe', category: 'cafe' },
       },
+    ]
+    const visitItems = [
       {
-        id: 'item-1',
-        type: 'visit' as const,
+        id: 'visit-1',
         user_id: 'u1',
         place_id: 'p1',
         created_at: '2024-01-01T12:00:00Z',
+        profiles: { username: 'bob', display_name: 'Bob', avatar_url: null },
+        places: { id: 'p1', name: 'Cafe', slug: 'cafe', category: 'cafe' },
       },
     ]
 
+    // First from('follows') call — follows lookup via eq
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const orderFn = jest.fn() as jest.MockedFunction<any>
-    orderFn.mockResolvedValue({ data: feedItems, error: null })
+    const followsEqFn = jest.fn() as jest.MockedFunction<any>
+    followsEqFn.mockResolvedValue({ data: followIds, error: null })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const inFn = jest.fn() as jest.MockedFunction<any>
-    inFn.mockReturnValue({ order: orderFn })
+    const followsSelectFn = jest.fn() as jest.MockedFunction<any>
+    followsSelectFn.mockReturnValue({ eq: followsEqFn })
+
+    // Reviews query: from('reviews').select(...).in(...).order(...)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const selectFn = jest.fn() as jest.MockedFunction<any>
-    selectFn.mockReturnValue({ in: inFn })
-    mockFrom().mockReturnValue({ select: selectFn })
+    const reviewsOrderFn = jest.fn() as jest.MockedFunction<any>
+    reviewsOrderFn.mockResolvedValue({ data: reviewItems, error: null })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reviewsInFn = jest.fn() as jest.MockedFunction<any>
+    reviewsInFn.mockReturnValue({ order: reviewsOrderFn })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reviewsSelectFn = jest.fn() as jest.MockedFunction<any>
+    reviewsSelectFn.mockReturnValue({ in: reviewsInFn })
+
+    // Visits query: from('visits').select(...).in(...).order(...)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsOrderFn = jest.fn() as jest.MockedFunction<any>
+    visitsOrderFn.mockResolvedValue({ data: visitItems, error: null })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsInFn = jest.fn() as jest.MockedFunction<any>
+    visitsInFn.mockReturnValue({ order: visitsOrderFn })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsSelectFn = jest.fn() as jest.MockedFunction<any>
+    visitsSelectFn.mockReturnValue({ in: visitsInFn })
+
+    mockFrom()
+      .mockReturnValueOnce({ select: followsSelectFn })
+      .mockReturnValueOnce({ select: reviewsSelectFn })
+      .mockReturnValueOnce({ select: visitsSelectFn })
 
     const result = await getFeed('user-id')
     expect(result.error).toBeNull()
@@ -74,27 +105,58 @@ describe('getFeed', () => {
 
   it('returns only items older than cursor timestamp when cursor is provided', async () => {
     const cursor = '2024-01-15T00:00:00Z'
-    const olderItem = {
-      id: 'item-old',
-      type: 'visit' as const,
+    const followIds = [{ following_id: 'u1' }]
+    const olderReview = {
+      id: 'review-old',
       user_id: 'u1',
       place_id: 'p1',
+      rating: 3,
+      content: null,
       created_at: '2024-01-01T12:00:00Z',
+      profiles: { username: 'bob', display_name: 'Bob', avatar_url: null },
+      places: { id: 'p1', name: 'Cafe', slug: 'cafe', category: 'cafe' },
     }
 
+    // First from('follows') call — follows lookup
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ltFn = jest.fn() as jest.MockedFunction<any>
-    ltFn.mockResolvedValue({ data: [olderItem], error: null })
+    const followsEqFn = jest.fn() as jest.MockedFunction<any>
+    followsEqFn.mockResolvedValue({ data: followIds, error: null })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const orderFn = jest.fn() as jest.MockedFunction<any>
-    orderFn.mockReturnValue({ lt: ltFn })
+    const followsSelectFn = jest.fn() as jest.MockedFunction<any>
+    followsSelectFn.mockReturnValue({ eq: followsEqFn })
+
+    // Reviews query with cursor: from('reviews').select(...).in(...).order(...).lt(...)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const inFn = jest.fn() as jest.MockedFunction<any>
-    inFn.mockReturnValue({ order: orderFn })
+    const reviewsLtFn = jest.fn() as jest.MockedFunction<any>
+    reviewsLtFn.mockResolvedValue({ data: [olderReview], error: null })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const selectFn = jest.fn() as jest.MockedFunction<any>
-    selectFn.mockReturnValue({ in: inFn })
-    mockFrom().mockReturnValue({ select: selectFn })
+    const reviewsOrderFn = jest.fn() as jest.MockedFunction<any>
+    reviewsOrderFn.mockReturnValue({ lt: reviewsLtFn })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reviewsInFn = jest.fn() as jest.MockedFunction<any>
+    reviewsInFn.mockReturnValue({ order: reviewsOrderFn })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reviewsSelectFn = jest.fn() as jest.MockedFunction<any>
+    reviewsSelectFn.mockReturnValue({ in: reviewsInFn })
+
+    // Visits query with cursor: from('visits').select(...).in(...).order(...).lt(...)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsLtFn = jest.fn() as jest.MockedFunction<any>
+    visitsLtFn.mockResolvedValue({ data: [], error: null })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsOrderFn = jest.fn() as jest.MockedFunction<any>
+    visitsOrderFn.mockReturnValue({ lt: visitsLtFn })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsInFn = jest.fn() as jest.MockedFunction<any>
+    visitsInFn.mockReturnValue({ order: visitsOrderFn })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visitsSelectFn = jest.fn() as jest.MockedFunction<any>
+    visitsSelectFn.mockReturnValue({ in: visitsInFn })
+
+    mockFrom()
+      .mockReturnValueOnce({ select: followsSelectFn })
+      .mockReturnValueOnce({ select: reviewsSelectFn })
+      .mockReturnValueOnce({ select: visitsSelectFn })
 
     const result = await getFeed('user-id', cursor)
     expect(result.error).toBeNull()
