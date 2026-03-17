@@ -1,7 +1,19 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
+import { FeedCard } from '@/components/FeedCard'
+import { FeedSkeleton } from '@/components/FeedSkeleton'
+import { useAuth } from '@/context/AuthContext'
+import { getFeed } from '@/lib/services/feed'
+import type { FeedItem } from '@/types/feed'
 
-export default function Home() {
+const PAGE_SIZE = 20
+
+// ─── Landing page (logged-out) ───────────────────────────────────────────────
+
+function LandingPage() {
   return (
     <>
       <Navbar />
@@ -26,16 +38,16 @@ export default function Home() {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link
-              href="/explore"
+              href="/login"
               className="px-8 py-3 rounded-full font-semibold text-base transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 bg-caramel text-cream"
             >
-              Keşfetmeye Başla
+              Giriş Yap
             </Link>
             <Link
-              href="/new"
+              href="/register"
               className="px-8 py-3 rounded-full font-semibold text-base border-2 transition-all duration-300 border-espresso text-espresso hover:bg-espresso hover:text-cream"
             >
-              Mekan Ekle
+              Kayıt Ol
             </Link>
           </div>
         </div>
@@ -83,4 +95,144 @@ export default function Home() {
       </section>
     </>
   )
+}
+
+// ─── Feed page (logged-in) ────────────────────────────────────────────────────
+
+function FeedPage({ userId }: { userId: string }) {
+  const [items, setItems] = useState<FeedItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const [cursor, setCursor] = useState<string | undefined>(undefined)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const loadingMoreRef = useRef(false)
+
+  // Initial load
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+
+    getFeed(userId).then(({ data }) => {
+      if (cancelled) return
+      const fetched = data ?? []
+      setItems(fetched)
+      setHasMore(fetched.length === PAGE_SIZE)
+      if (fetched.length > 0) {
+        setCursor(fetched[fetched.length - 1].created_at)
+      }
+      setLoading(false)
+    })
+
+    return () => { cancelled = true }
+  }, [userId])
+
+  // Infinite scroll
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loadingMoreRef.current && hasMore && !loading) {
+          loadMore()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasMore, loading, cursor])
+
+  const loadMore = async () => {
+    if (loadingMoreRef.current || !hasMore) return
+    loadingMoreRef.current = true
+    setLoadingMore(true)
+
+    const { data } = await getFeed(userId, cursor)
+    const fetched = data ?? []
+
+    setItems((prev) => [...prev, ...fetched])
+    setHasMore(fetched.length === PAGE_SIZE)
+    if (fetched.length > 0) {
+      setCursor(fetched[fetched.length - 1].created_at)
+    }
+
+    loadingMoreRef.current = false
+    setLoadingMore(false)
+  }
+
+  return (
+    <>
+      <Navbar />
+      <main className="max-w-2xl mx-auto px-4 py-8">
+        <h1 className="text-xl font-bold text-espresso mb-6">Aktivite Akışı</h1>
+
+        {loading ? (
+          <FeedSkeleton count={5} />
+        ) : items.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-coffee mb-4">
+              Henüz kimseyi takip etmiyorsun. Keşfet ve ilginç insanları bul.
+            </p>
+            <Link
+              href="/explore"
+              className="inline-block px-6 py-2 rounded-full font-semibold text-sm bg-caramel text-cream hover:opacity-90 transition-opacity"
+            >
+              Keşfet
+            </Link>
+          </div>
+        ) : (
+          <>
+            <div className="space-y-3">
+              {items.map((item) => (
+                <FeedCard key={`${item.type}-${item.id}`} item={item} />
+              ))}
+            </div>
+
+            {/* Loading more indicator */}
+            {loadingMore && (
+              <div className="mt-3">
+                <FeedSkeleton count={2} />
+              </div>
+            )}
+
+            {/* Sentinel for IntersectionObserver */}
+            <div ref={sentinelRef} className="h-4" />
+
+            {!hasMore && items.length > 0 && (
+              <p className="text-center text-sm text-warmgray-400 py-6">
+                Tüm aktiviteler yüklendi.
+              </p>
+            )}
+          </>
+        )}
+      </main>
+    </>
+  )
+}
+
+// ─── Root page (auth split) ───────────────────────────────────────────────────
+
+export default function Home() {
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
+        </div>
+      </>
+    )
+  }
+
+  if (!user) {
+    return <LandingPage />
+  }
+
+  return <FeedPage userId={user.id} />
 }
