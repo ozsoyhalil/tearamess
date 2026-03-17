@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Completed 02-social-graph 02-06-PLAN.md (human verify approved)
-last_updated: "2026-03-17T08:07:30.314Z"
+last_updated: "2026-03-17T08:46:12.535Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
