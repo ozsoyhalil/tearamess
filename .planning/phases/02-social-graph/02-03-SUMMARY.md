@@ -131,3 +131,13 @@ None - no external service configuration required.
 ---
 *Phase: 02-social-graph*
 *Completed: 2026-03-17*
+
+## Self-Check: PASSED
+
+- FOUND: src/lib/services/follows.ts
+- FOUND: src/lib/services/feed.ts
+- FOUND: src/lib/services/visits.ts
+- FOUND: .planning/phases/02-social-graph/02-03-SUMMARY.md
+- FOUND: 0c4bf5e (follows service commit)
+- FOUND: 1aa83c5 (feed/visits/profiles/reviews commit)
+- All 24 service tests GREEN
