@@ -81,7 +81,15 @@ Plans:
   2. A user can create a named list (e.g., "En iyi kahvaltılıklar") and add or remove places from it
   3. A user's public lists appear on their profile page and are browsable by other users
   4. A user can toggle any of their lists between private and public
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Wave 0: Define List/ListItem types and create failing test stubs for lists service
+- [ ] 03-02-PLAN.md — Wave 1: TDD implement lists.ts service (all CRUD + wishlist + membership operations)
+- [ ] 03-03-PLAN.md — Wave 2: Build WishlistButton (optimistic toggle) and CreateListModal components
+- [ ] 03-04-PLAN.md — Wave 2: Build ListItemSelector popover and list detail page /lists/[id]
+- [ ] 03-05-PLAN.md — Wave 3: Wire Lists tab in profile pages and WishlistButton + ListItemSelector in place detail
+- [ ] 03-06-PLAN.md — Wave 4: Human verification checkpoint for all four LIST requirements
 
 ### Phase 4: Check-in + Grid
 **Goal**: Users can check in to places, and each check-in colors a cell on an interactive Ankara grid map — making the city explorable as a visual canvas
@@ -114,6 +122,6 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 | 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
 | 1. Foundation | 4/4 | Complete   | 2026-03-14 |
 | 2. Social Graph | 5/6 | In Progress|  |
-| 3. Lists | 0/? | Not started | - |
+| 3. Lists | 0/6 | Not started | - |
 | 4. Check-in + Grid | 0/? | Not started | - |
 | 5. Stats + Coverage | 0/? | Not started | - |
