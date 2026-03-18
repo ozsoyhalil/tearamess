@@ -104,9 +104,18 @@ export default function ProfilePage() {
 
   if (!user) return null
 
-  // Build a profile shape suitable for ProfileLayout (needs user_id)
+  // Build a profile shape suitable for ProfileLayout (needs user_id).
+  // Fall back to Supabase auth user_metadata when no profiles row exists yet
+  // (e.g. new users who signed up via OAuth without a seeded profile row).
+  const metaDisplayName: string | null =
+    (user.user_metadata?.full_name as string | undefined) ??
+    (user.user_metadata?.name as string | undefined) ??
+    (user.email ? user.email.split('@')[0] : null)
+
   const profileForLayout: import('@/types/profile').Profile = {
-    ...(profile ?? { username: null, display_name: null }),
+    username: profile?.username ?? null,
+    display_name: profile?.display_name ?? metaDisplayName,
+    avatar_url: profile?.avatar_url ?? (user.user_metadata?.avatar_url as string | undefined) ?? null,
     user_id: user.id,
   }
 
