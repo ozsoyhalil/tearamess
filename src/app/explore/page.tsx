@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
-import StarRating from '@/components/StarRating'
-import { Card } from '@/components/ui/Card'
+import { PlaceCard } from '@/components/PlaceCard'
 import { Input } from '@/components/ui/Input'
 import { getPlaces, searchPlaces } from '@/lib/services/places'
 import type { Place } from '@/types/place'
@@ -14,20 +13,6 @@ const CATEGORIES = [
   'Sokak/Cadde', 'Kütüphane', 'Bar', 'Teras/Çatı',
   'Köy/Kasaba', 'Doğa/Yürüyüş', 'Manzara Noktası', 'Tarihi Mekan', 'Diğer',
 ]
-
-const CAT_GRADIENT: Record<string, string> = {
-  'Kafe': 'linear-gradient(135deg, #FDE8C8 0%, #F5E4CE 100%)',
-  'Restoran': 'linear-gradient(135deg, #FDD9B5 0%, #F5DDCB 100%)',
-  'Park': 'linear-gradient(135deg, #D4E8C8 0%, #E0EDD8 100%)',
-  'Müze': 'linear-gradient(135deg, #C8D4E8 0%, #D8DFF5 100%)',
-  'Sahil/Plaj': 'linear-gradient(135deg, #C8E8E4 0%, #D8EFF0 100%)',
-  'Bar': 'linear-gradient(135deg, #E4C8E8 0%, #EDD8F5 100%)',
-  'Teras/Çatı': 'linear-gradient(135deg, #E8D4C8 0%, #F5DFD8 100%)',
-  'Doğa/Yürüyüş': 'linear-gradient(135deg, #C8E4C8 0%, #D8EDD8 100%)',
-  'Manzara Noktası': 'linear-gradient(135deg, #C8DCE8 0%, #D8E5F0 100%)',
-}
-
-const DEFAULT_GRADIENT = 'linear-gradient(135deg, #F5EDE4 0%, #E8DDD1 100%)'
 
 type SearchHit = {
   id: string
@@ -234,61 +219,7 @@ export default function ExplorePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map(place => (
               <Link key={place.id} href={`/place/${place.slug}`}>
-                <Card variant="interactive" className="overflow-hidden">
-                  {/* Card top gradient */}
-                  <div
-                    className="h-40 relative flex items-center justify-center"
-                    style={{ background: CAT_GRADIENT[place.category] ?? DEFAULT_GRADIENT }}
-                  >
-                    <span className="text-5xl opacity-30 select-none">
-                      {place.category === 'Kafe' ? '☕' :
-                       place.category === 'Restoran' ? '🍽️' :
-                       place.category === 'Park' ? '🌳' :
-                       place.category === 'Müze' ? '🏛️' :
-                       place.category === 'Sahil/Plaj' ? '🏖️' :
-                       place.category === 'Bar' ? '🍸' :
-                       place.category === 'Teras/Çatı' ? '🌇' :
-                       place.category === 'Doğa/Yürüyüş' ? '🥾' :
-                       place.category === 'Manzara Noktası' ? '🌅' :
-                       place.category === 'Tarihi Mekan' ? '🏯' :
-                       place.category === 'Kütüphane' ? '📚' :
-                       '📍'}
-                    </span>
-                    <span
-                      className="absolute top-3 right-3 text-xs font-semibold px-3 py-1 rounded-full text-cream"
-                      style={{ backgroundColor: 'rgba(75,46,43,0.75)' }}
-                    >
-                      {place.category}
-                    </span>
-                  </div>
-
-                  {/* Card body */}
-                  <div className="p-5">
-                    <h3 className="font-semibold text-lg leading-snug mb-1 transition-colors duration-200 text-espresso">
-                      {place.name}
-                    </h3>
-                    <p className="text-sm mb-4 text-coffee">
-                      📍 {place.city}{place.neighborhood ? `, ${place.neighborhood}` : ''}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      {place.avg_rating !== null && place.avg_rating !== undefined ? (
-                        <div className="flex items-center gap-2">
-                          <StarRating value={place.avg_rating} size="sm" />
-                          <span className="text-sm font-bold text-caramel">
-                            {place.avg_rating}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-sm italic text-warmgray-400">
-                          Henüz değerlendirilmedi
-                        </span>
-                      )}
-                      <span className="text-sm text-warmgray-500">
-                        {place.review_count ?? 0} review
-                      </span>
-                    </div>
-                  </div>
-                </Card>
+                <PlaceCard place={place} />
               </Link>
             ))}
           </div>

@@ -9,5 +9,6 @@ export interface Place {
   created_by?: string
   created_at?: string
   avg_rating?: number | null
-  review_count?: number
+  review_count?: number | null
+  cover_image_url?: string | null
 }

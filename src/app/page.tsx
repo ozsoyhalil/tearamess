@@ -5,9 +5,12 @@ import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import { FeedCard } from '@/components/FeedCard'
 import { FeedSkeleton } from '@/components/FeedSkeleton'
+import { PlaceCard } from '@/components/PlaceCard'
 import { useAuth } from '@/context/AuthContext'
 import { getFeed } from '@/lib/services/feed'
+import { getTopPlaces, getRecentPlaces } from '@/lib/services/places'
 import type { FeedItem } from '@/types/feed'
+import type { Place } from '@/types/place'
 
 const PAGE_SIZE = 20
 
@@ -97,6 +100,75 @@ function LandingPage() {
   )
 }
 
+// ─── Discover section (empty feed fallback) ───────────────────────────────────
+
+function DiscoverSection() {
+  const [topPlaces, setTopPlaces] = useState<Place[]>([])
+  const [recentPlaces, setRecentPlaces] = useState<Place[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.all([getTopPlaces(6), getRecentPlaces(6)]).then(([top, recent]) => {
+      setTopPlaces(top.data ?? [])
+      setRecentPlaces(recent.data ?? [])
+      setLoading(false)
+    })
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-20">
+        <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="py-4">
+      {/* Popular places */}
+      {topPlaces.length > 0 && (
+        <section className="mb-10">
+          <h2 className="text-lg font-bold text-espresso mb-4">Popüler Mekanlar</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {topPlaces.map(place => (
+              <Link key={place.id} href={`/place/${place.slug}`}>
+                <PlaceCard place={place} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Recently added */}
+      {recentPlaces.length > 0 && (
+        <section className="mb-10">
+          <h2 className="text-lg font-bold text-espresso mb-4">Yeni Eklenen Mekanlar</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {recentPlaces.map(place => (
+              <Link key={place.id} href={`/place/${place.slug}`}>
+                <PlaceCard place={place} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* CTA */}
+      <div className="text-center py-6 border-t border-warmgray-100">
+        <p className="text-sm text-coffee mb-4">
+          Takip ettiğin kişilerin aktiviteleri burada görünecek.
+        </p>
+        <Link
+          href="/explore"
+          className="inline-block px-8 py-3 rounded-full font-semibold text-sm bg-caramel text-cream hover:opacity-90 transition-opacity shadow-sm"
+        >
+          Keşfetmeye Başla
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 // ─── Feed page (logged-in) ────────────────────────────────────────────────────
 
 function FeedPage({ userId }: { userId: string }) {
@@ -164,26 +236,24 @@ function FeedPage({ userId }: { userId: string }) {
     setLoadingMore(false)
   }
 
+  // Feed is empty (finished loading, no items) → show discover
+  if (!loading && items.length === 0) {
+    return (
+      <>
+        <Navbar />
+        <main className="max-w-2xl mx-auto px-4 py-8">
+          <DiscoverSection />
+        </main>
+      </>
+    )
+  }
+
   return (
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-xl font-bold text-espresso mb-6">Aktivite Akışı</h1>
-
         {loading ? (
           <FeedSkeleton count={5} />
-        ) : items.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-coffee mb-4">
-              Henüz kimseyi takip etmiyorsun. Keşfet ve ilginç insanları bul.
-            </p>
-            <Link
-              href="/explore"
-              className="inline-block px-6 py-2 rounded-full font-semibold text-sm bg-caramel text-cream hover:opacity-90 transition-opacity"
-            >
-              Keşfet
-            </Link>
-          </div>
         ) : (
           <>
             <div className="space-y-3">
@@ -192,14 +262,12 @@ function FeedPage({ userId }: { userId: string }) {
               ))}
             </div>
 
-            {/* Loading more indicator */}
             {loadingMore && (
               <div className="mt-3">
                 <FeedSkeleton count={2} />
               </div>
             )}
 
-            {/* Sentinel for IntersectionObserver */}
             <div ref={sentinelRef} className="h-4" />
 
             {!hasMore && items.length > 0 && (
