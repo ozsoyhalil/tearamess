@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-lists-04-PLAN.md — ListItemSelector + list detail page built, 54 tests GREEN
-last_updated: "2026-03-18T11:47:25.602Z"
+stopped_at: Completed 03-lists-05-PLAN.md — Lists tab wired in profile pages, WishlistButton + ListItemSelector in place detail, 54 tests GREEN
+last_updated: "2026-03-18T11:53:13.487Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 19
-  completed_plans: 17
+  completed_plans: 18
   percent: 0
 ---
 
@@ -69,6 +69,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-lists P02 | 9min | 2 tasks | 2 files |
 | Phase 03-lists P03 | 3min | 2 tasks | 2 files |
 | Phase 03-lists P04 | 8min | 2 tasks | 4 files |
+| Phase 03-lists P05 | 8min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -115,6 +116,8 @@ Recent decisions affecting current work:
 - [Phase 03-lists]: CreateListModal uses ui/Input + ui/Textarea primitives; validates name client-side before service call
 - [Phase 03-lists]: getPlaceListMembership added to lists.ts in Plan 04 as stub — Plan 05 can extend or replace with optimized query
 - [Phase 03-lists]: list detail page uses inline notFound state (getListById returns null) rather than Next.js notFound() — works in client components and matches RLS privacy model
+- [Phase 03-lists]: isWishlisted seeded at page load via isPlaceInWishlist — WishlistButton handles optimistic toggle independently
+- [Phase 03-lists]: Lazy tab load pattern applied in profile pages: useEffect gated on activeTab + loaded flag to prevent eager fetches
 
 ### Pending Todos
 
@@ -129,6 +132,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T11:47:25.600Z
-Stopped at: Completed 03-lists-04-PLAN.md — ListItemSelector + list detail page built, 54 tests GREEN
+Last session: 2026-03-18T11:53:13.484Z
+Stopped at: Completed 03-lists-05-PLAN.md — Lists tab wired in profile pages, WishlistButton + ListItemSelector in place detail, 54 tests GREEN
 Resume file: None
