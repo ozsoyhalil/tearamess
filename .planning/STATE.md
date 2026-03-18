@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-lists-01-PLAN.md — schema confirmed, plan complete
-last_updated: "2026-03-18T10:24:51.166Z"
+stopped_at: Completed 03-lists-02-PLAN.md — lists service implemented, 21 tests GREEN
+last_updated: "2026-03-18T10:42:16.786Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 19
-  completed_plans: 14
+  completed_plans: 15
   percent: 0
 ---
 
@@ -66,6 +66,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-social-graph P06 | 5min | 1 tasks | 0 files |
 | Phase 03-lists P01 | 8min | 3 tasks | 3 files |
 | Phase 03-lists P01 | 10min | 3 tasks | 3 files |
+| Phase 03-lists P02 | 9min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,8 @@ Recent decisions affecting current work:
 - [Phase 03-lists]: is_wishlist boolean on lists table identifies built-in wishlist — no separate WishlistItem type needed
 - [Phase 03-lists]: ts-jest 29 + jest 30 silently resolves missing imports to undefined — RED baseline confirmed at stub-contract level, not import-failure level
 - [Phase 03-lists]: Migration SQL committed to supabase/migrations/ and confirmed applied — lists and list_items tables live in Supabase with RLS enabled
+- [Phase 03-lists]: addPlaceToList treats Postgres 23505 unique constraint as success — duplicate insert is a no-op
+- [Phase 03-lists]: ListWithPlaces type exported from lists.ts: ListItem & { places: Pick<Place, id|name|category|neighborhood> | null }
 
 ### Pending Todos
 
@@ -120,6 +123,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T10:24:51.163Z
-Stopped at: Completed 03-lists-01-PLAN.md — schema confirmed, plan complete
+Last session: 2026-03-18T10:42:16.784Z
+Stopped at: Completed 03-lists-02-PLAN.md — lists service implemented, 21 tests GREEN
 Resume file: None
