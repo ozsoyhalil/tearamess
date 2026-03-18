@@ -24,7 +24,20 @@ export async function getUserLists(
     .order('created_at', { ascending: false })
 
   if (error) return { data: null, error: error.message }
-  return { data: (data ?? []) as unknown as List[], error: null }
+
+  // Deduplicate: keep at most one wishlist row (the first one returned, which is
+  // ordered by is_wishlist DESC so the real one comes first)
+  const rows = (data ?? []) as unknown as List[]
+  let wishlistSeen = false
+  const deduped = rows.filter((list) => {
+    if (list.is_wishlist) {
+      if (wishlistSeen) return false
+      wishlistSeen = true
+    }
+    return true
+  })
+
+  return { data: deduped, error: null }
 }
 
 export async function getOrCreateWishlist(
