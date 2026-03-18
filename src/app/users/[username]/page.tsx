@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
+import { Card } from '@/components/ui/Card'
 import { ProfileLayout } from '@/components/ProfileLayout'
 import { FollowListModal } from '@/components/FollowListModal'
 import { useAuth } from '@/context/AuthContext'
@@ -14,8 +15,10 @@ import {
   isFollowing as checkIsFollowing,
 } from '@/lib/services/follows'
 import { getUserVisits } from '@/lib/services/visits'
+import { getUserLists } from '@/lib/services/lists'
 import type { Profile } from '@/types/profile'
 import type { Visit } from '@/types/visit'
+import type { List } from '@/types/list'
 
 export default function UserProfilePage() {
   const { user } = useAuth()
@@ -32,6 +35,8 @@ export default function UserProfilePage() {
   const [showFollowingModal, setShowFollowingModal] = useState(false)
   const [visits, setVisits] = useState<Visit[]>([])
   const [visitsLoaded, setVisitsLoaded] = useState(false)
+  const [lists, setLists] = useState<List[]>([])
+  const [listsLoaded, setListsLoaded] = useState(false)
   const [pageLoading, setPageLoading] = useState(true)
 
   // Load profile + counts
@@ -90,6 +95,23 @@ export default function UserProfilePage() {
 
     return () => { cancelled = true }
   }, [activeTab, visitsLoaded, profile])
+
+  // Load lists when tab is active — public only for other users
+  useEffect(() => {
+    if (activeTab !== 'lists' || listsLoaded || !profile) return
+    let cancelled = false
+
+    const targetUserId = profile.user_id ?? ''
+    if (!targetUserId) return
+
+    getUserLists(targetUserId, false).then(({ data }) => {
+      if (cancelled) return
+      setLists(data ?? [])
+      setListsLoaded(true)
+    })
+
+    return () => { cancelled = true }
+  }, [activeTab, listsLoaded, profile])
 
   if (pageLoading) {
     return (
@@ -182,7 +204,37 @@ export default function UserProfilePage() {
 
           {/* Lists tab */}
           {activeTab === 'lists' && (
-            <p className="text-sm text-warmgray-400 py-4">Henüz liste yok.</p>
+            <div>
+              {!listsLoaded ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[0, 1, 2].map((i) => (
+                    <div key={i} className="h-24 rounded-xl animate-pulse bg-warmgray-100" />
+                  ))}
+                </div>
+              ) : lists.length === 0 ? (
+                <p className="text-sm text-warmgray-400 py-4">
+                  Bu kullanıcının herkese açık listesi yok.
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {lists.map((list) => (
+                    <Card key={list.id} variant="interactive" className="p-0">
+                      <Link
+                        href={`/lists/${list.id}`}
+                        className="block p-4 h-full"
+                      >
+                        <p className="text-sm font-semibold text-espresso leading-tight line-clamp-2 mb-1">
+                          {list.name}
+                        </p>
+                        <p className="text-xs text-warmgray-400">
+                          {list.item_count ?? 0} mekan
+                        </p>
+                      </Link>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           {/* Reviews tab */}

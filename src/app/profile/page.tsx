@@ -7,14 +7,17 @@ import StarRating from '@/components/StarRating'
 import { Card } from '@/components/ui/Card'
 import { ProfileLayout } from '@/components/ProfileLayout'
 import { FollowListModal } from '@/components/FollowListModal'
+import { CreateListModal } from '@/components/CreateListModal'
 import { useAuth } from '@/context/AuthContext'
 import { getProfileByUserId } from '@/lib/services/profiles'
 import { getUserReviews } from '@/lib/services/reviews'
 import { getFollowerCount, getFollowingCount } from '@/lib/services/follows'
 import { getUserVisits } from '@/lib/services/visits'
+import { getUserLists } from '@/lib/services/lists'
 import type { Profile } from '@/types/profile'
 import type { Review } from '@/types/review'
 import type { Visit } from '@/types/visit'
+import type { List } from '@/types/list'
 
 type Tab = 'visits' | 'lists' | 'reviews'
 
@@ -31,6 +34,10 @@ export default function ProfilePage() {
   const [showFollowersModal, setShowFollowersModal] = useState(false)
   const [showFollowingModal, setShowFollowingModal] = useState(false)
   const [visitsLoaded, setVisitsLoaded] = useState(false)
+  const [lists, setLists] = useState<List[]>([])
+  const [listsLoading, setListsLoading] = useState(false)
+  const [listsLoaded, setListsLoaded] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   useEffect(() => {
     if (loading) return
@@ -58,6 +65,22 @@ export default function ProfilePage() {
 
     fetchData()
   }, [user, loading])
+
+  // Load lists when lists tab is activated
+  useEffect(() => {
+    if (activeTab !== 'lists' || listsLoaded || !user) return
+    let cancelled = false
+
+    setListsLoading(true)
+    getUserLists(user.id, true).then(({ data }) => {
+      if (cancelled) return
+      setLists(data ?? [])
+      setListsLoaded(true)
+      setListsLoading(false)
+    })
+
+    return () => { cancelled = true }
+  }, [activeTab, listsLoaded, user])
 
   if (loading || dataLoading) {
     return (
@@ -143,7 +166,84 @@ export default function ProfilePage() {
 
           {/* Lists tab */}
           {activeTab === 'lists' && (
-            <p className="text-sm text-warmgray-400 py-4">Henüz liste yok.</p>
+            <div>
+              {/* Header row with create button */}
+              <div className="flex items-center justify-between mb-4">
+                <span />
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="text-sm font-medium px-3 py-1.5 rounded-lg bg-caramel text-cream hover:opacity-90 transition-opacity"
+                >
+                  + Yeni Liste
+                </button>
+              </div>
+
+              {listsLoading ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[0, 1, 2].map((i) => (
+                    <div key={i} className="h-24 rounded-xl animate-pulse bg-warmgray-100" />
+                  ))}
+                </div>
+              ) : lists.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-sm text-warmgray-400 mb-3">Henüz özel liste yok.</p>
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="text-sm font-medium text-caramel hover:underline"
+                  >
+                    + Yeni Liste Oluştur
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {lists.map((list) => (
+                    <Card key={list.id} variant="interactive" className="p-0">
+                      <Link
+                        href={`/lists/${list.id}`}
+                        className="block p-4 h-full"
+                      >
+                        <div className="flex items-start justify-between gap-1 mb-1">
+                          <span className="text-sm font-semibold text-espresso leading-tight line-clamp-2">
+                            {list.name}
+                          </span>
+                          {!list.is_public && (
+                            <span
+                              className="shrink-0 text-warmgray-400 mt-0.5"
+                              title="Gizli liste"
+                              aria-label="Gizli liste"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                className="w-3.5 h-3.5"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-warmgray-400">
+                          {list.item_count ?? 0} mekan
+                        </p>
+                      </Link>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              <CreateListModal
+                userId={user.id}
+                isOpen={showCreateModal}
+                onClose={() => setShowCreateModal(false)}
+                onCreated={(list) => setLists((prev) => [list, ...prev])}
+              />
+            </div>
           )}
 
           {/* Reviews tab */}
