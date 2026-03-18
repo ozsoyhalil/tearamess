@@ -13,7 +13,7 @@ import { getProfileByUserId } from '@/lib/services/profiles'
 import { getUserReviews } from '@/lib/services/reviews'
 import { getFollowerCount, getFollowingCount } from '@/lib/services/follows'
 import { getUserVisits } from '@/lib/services/visits'
-import { getUserLists } from '@/lib/services/lists'
+import { getUserLists, deleteList } from '@/lib/services/lists'
 import type { Profile } from '@/types/profile'
 import type { Review } from '@/types/review'
 import type { Visit } from '@/types/visit'
@@ -38,6 +38,15 @@ export default function ProfilePage() {
   const [listsLoading, setListsLoading] = useState(false)
   const [listsLoaded, setListsLoaded] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [deletingListId, setDeletingListId] = useState<string | null>(null)
+
+  const handleDeleteList = async (listId: string) => {
+    if (!window.confirm('Bu listeyi silmek istediğinizden emin misiniz?')) return
+    setDeletingListId(listId)
+    await deleteList(listId)
+    setLists((prev) => prev.filter((l) => l.id !== listId))
+    setDeletingListId(null)
+  }
 
   useEffect(() => {
     if (loading) return
@@ -197,7 +206,7 @@ export default function ProfilePage() {
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {lists.map((list) => (
-                    <Card key={list.id} variant="interactive" className="p-0">
+                    <Card key={list.id} variant="interactive" className="p-0 relative">
                       <Link
                         href={`/lists/${list.id}`}
                         className="block p-4 h-full"
@@ -232,6 +241,22 @@ export default function ProfilePage() {
                           {list.item_count ?? 0} mekan
                         </p>
                       </Link>
+                      {/* Delete button for non-wishlist lists */}
+                      {!list.is_wishlist && (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleDeleteList(list.id)
+                          }}
+                          disabled={deletingListId === list.id}
+                          aria-label="Listeyi sil"
+                          className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center rounded-full text-warmgray-300 hover:text-red-400 hover:bg-red-50 transition-colors z-10 disabled:opacity-40"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                          </svg>
+                        </button>
+                      )}
                     </Card>
                   ))}
                 </div>
