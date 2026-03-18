@@ -12,7 +12,10 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { getPlaceBySlug } from '@/lib/services/places'
 import { getReviewsForPlace, createReview } from '@/lib/services/reviews'
+import { isPlaceInWishlist } from '@/lib/services/lists'
 import { reviewSchema, ReviewInput } from '@/lib/schemas/reviews'
+import { WishlistButton } from '@/components/WishlistButton'
+import { ListItemSelector } from '@/components/ListItemSelector'
 import { useAuth } from '@/context/AuthContext'
 import type { Review } from '@/types/review'
 import type { Place } from '@/types/place'
@@ -36,6 +39,8 @@ export default function PlacePage() {
   const [pageLoading, setPageLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [alreadyReviewed, setAlreadyReviewed] = useState(false)
+  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [showListSelector, setShowListSelector] = useState(false)
 
   const {
     register,
@@ -76,10 +81,16 @@ export default function PlacePage() {
       if (error || !data) { setNotFound(true); setPageLoading(false); return }
       setPlace(data)
       await fetchReviews(data.id)
+
+      if (user) {
+        const { data: wishlisted } = await isPlaceInWishlist(user.id, data.id)
+        setIsWishlisted(wishlisted)
+      }
+
       setPageLoading(false)
     }
     load()
-  }, [slug])
+  }, [slug, user])
 
   useEffect(() => {
     if (place && user) setAlreadyReviewed(reviews.some(r => r.user_id === user.id))
@@ -147,6 +158,27 @@ export default function PlacePage() {
               <p className="text-sm text-coffee">
                 📍 {place.neighborhood ? `${place.neighborhood}, ` : ''}{place.city}
               </p>
+
+              {/* Wishlist + list actions */}
+              <div className="flex items-center gap-2 mt-3 flex-wrap relative">
+                <WishlistButton placeId={place.id} initialIsWishlisted={isWishlisted} />
+                {user && (
+                  <>
+                    <button
+                      onClick={() => setShowListSelector(true)}
+                      className="text-sm border border-warmgray-300 rounded-lg px-3 py-1.5 hover:bg-warmgray-50 transition-colors"
+                    >
+                      Listeye Ekle
+                    </button>
+                    <ListItemSelector
+                      placeId={place.id}
+                      userId={user.id}
+                      isOpen={showListSelector}
+                      onClose={() => setShowListSelector(false)}
+                    />
+                  </>
+                )}
+              </div>
             </div>
 
             {avgRating !== null ? (
