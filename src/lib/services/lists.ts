@@ -205,3 +205,24 @@ export async function getListItems(
   if (error) return { data: null, error: error.message }
   return { data: (data ?? []) as unknown as ListWithPlaces[], error: null }
 }
+
+/**
+ * Returns the list IDs that contain the given place for a specific user.
+ * Used by ListItemSelector to pre-check which lists already include a place.
+ * NOTE: Stub added in Plan 04 to satisfy TypeScript import; full implementation
+ * in Plan 05 Task 2 will replace this with a real query.
+ */
+export async function getPlaceListMembership(
+  userId: string,
+  placeId: string
+): Promise<{ data: string[] | null; error: string | null }> {
+  const { data, error } = await supabase
+    .from('list_items')
+    .select('list_id, lists!inner(user_id)')
+    .eq('place_id', placeId)
+    .eq('lists.user_id', userId)
+
+  if (error) return { data: null, error: error.message }
+  const ids = (data ?? []).map((row: { list_id: string }) => row.list_id)
+  return { data: ids, error: null }
+}
