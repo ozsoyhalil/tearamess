@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 0: Polish & Bugfix** - Tiramisu tema tutarlılığı, kritik veri hataları, ve temel UI kalitesi (completed 2026-03-13)
 - [x] **Phase 1: Foundation** - Service/repository layer, middleware auth guard, and Zod form validation (completed 2026-03-14)
 - [ ] **Phase 2: Social Graph** - One-way follow system, public user profiles, and activity feed
-- [ ] **Phase 3: Lists** - Wishlist and custom lists for organizing and sharing places
+- [x] **Phase 3: Lists** - Wishlist and custom lists for organizing and sharing places (completed 2026-03-18)
 - [ ] **Phase 4: Check-in + Grid** - Check-in system with PostGIS and Ankara grid cell tracking
 - [ ] **Phase 5: Stats + Coverage** - Personal stats dashboard and Ankara coverage percentage
 
@@ -122,6 +122,6 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 | 0. Polish & Bugfix | 3/3 | Complete   | 2026-03-13 |
 | 1. Foundation | 4/4 | Complete   | 2026-03-14 |
 | 2. Social Graph | 5/6 | In Progress|  |
-| 3. Lists | 5/6 | In Progress|  |
+| 3. Lists | 6/6 | Complete   | 2026-03-18 |
 | 4. Check-in + Grid | 0/? | Not started | - |
 | 5. Stats + Coverage | 0/? | Not started | - |

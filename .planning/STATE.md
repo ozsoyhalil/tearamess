@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-lists-05-PLAN.md — Lists tab wired in profile pages, WishlistButton + ListItemSelector in place detail, 54 tests GREEN
-last_updated: "2026-03-18T11:53:13.487Z"
+stopped_at: Completed 03-lists-06-PLAN.md — human verification passed with 3 bug fixes; Phase 3 Lists complete
+last_updated: "2026-03-18T12:17:20.974Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 19
-  completed_plans: 18
+  completed_plans: 19
   percent: 0
 ---
 
@@ -70,6 +70,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-lists P03 | 3min | 2 tasks | 2 files |
 | Phase 03-lists P04 | 8min | 2 tasks | 4 files |
 | Phase 03-lists P05 | 8min | 2 tasks | 3 files |
+| Phase 03-lists P06 | 15min | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,8 @@ Recent decisions affecting current work:
 - [Phase 03-lists]: list detail page uses inline notFound state (getListById returns null) rather than Next.js notFound() — works in client components and matches RLS privacy model
 - [Phase 03-lists]: isWishlisted seeded at page load via isPlaceInWishlist — WishlistButton handles optimistic toggle independently
 - [Phase 03-lists]: Lazy tab load pattern applied in profile pages: useEffect gated on activeTab + loaded flag to prevent eager fetches
+- [Phase 03-lists]: getUserLists deduplicates wishlist rows client-side via filter — first row (is_wishlist DESC) is kept, extras dropped
+- [Phase 03-lists]: Delete affordance added to profile Lists grid for non-wishlist lists; display name falls back to auth user_metadata then email prefix when profiles row is absent
 
 ### Pending Todos
 
@@ -132,6 +135,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T11:53:13.484Z
-Stopped at: Completed 03-lists-05-PLAN.md — Lists tab wired in profile pages, WishlistButton + ListItemSelector in place detail, 54 tests GREEN
+Last session: 2026-03-18T12:17:20.972Z
+Stopped at: Completed 03-lists-06-PLAN.md — human verification passed with 3 bug fixes; Phase 3 Lists complete
 Resume file: None
