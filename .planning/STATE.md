@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-lists-02-PLAN.md — lists service implemented, 21 tests GREEN
-last_updated: "2026-03-18T10:42:16.786Z"
+stopped_at: Completed 03-lists-03-PLAN.md — WishlistButton and CreateListModal built, 54 tests GREEN
+last_updated: "2026-03-18T10:52:40.807Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 19
-  completed_plans: 15
+  completed_plans: 16
   percent: 0
 ---
 
@@ -67,6 +67,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-lists P01 | 8min | 3 tasks | 3 files |
 | Phase 03-lists P01 | 10min | 3 tasks | 3 files |
 | Phase 03-lists P02 | 9min | 2 tasks | 2 files |
+| Phase 03-lists P03 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,8 @@ Recent decisions affecting current work:
 - [Phase 03-lists]: Migration SQL committed to supabase/migrations/ and confirmed applied — lists and list_items tables live in Supabase with RLS enabled
 - [Phase 03-lists]: addPlaceToList treats Postgres 23505 unique constraint as success — duplicate insert is a no-op
 - [Phase 03-lists]: ListWithPlaces type exported from lists.ts: ListItem & { places: Pick<Place, id|name|category|neighborhood> | null }
+- [Phase 03-lists]: WishlistButton uses inline SVG bookmark + text-[#C08552] hex for caramel fill state; no icon library dependency added
+- [Phase 03-lists]: CreateListModal uses ui/Input + ui/Textarea primitives; validates name client-side before service call
 
 ### Pending Todos
 
@@ -123,6 +126,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T10:42:16.784Z
-Stopped at: Completed 03-lists-02-PLAN.md — lists service implemented, 21 tests GREEN
+Last session: 2026-03-18T10:52:40.805Z
+Stopped at: Completed 03-lists-03-PLAN.md — WishlistButton and CreateListModal built, 54 tests GREEN
 Resume file: None
