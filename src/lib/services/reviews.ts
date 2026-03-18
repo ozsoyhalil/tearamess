@@ -43,3 +43,21 @@ export async function getUserReviews(
   if (error) return { data: null, error: error.message }
   return { data: data ?? [], error: null }
 }
+
+export async function getViewerRatingsForPlaces(
+  userId: string,
+  placeIds: string[]
+): Promise<{ data: Record<string, number> | null; error: string | null }> {
+  if (placeIds.length === 0) return { data: {}, error: null }
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('place_id, rating')
+    .eq('user_id', userId)
+    .in('place_id', placeIds)
+  if (error) return { data: null, error: error.message }
+  const map: Record<string, number> = {}
+  for (const row of data ?? []) {
+    map[row.place_id] = row.rating
+  }
+  return { data: map, error: null }
+}
