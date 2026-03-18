@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-lists-01-PLAN.md — awaiting human Supabase table confirmation
-last_updated: "2026-03-18T10:11:44.223Z"
+stopped_at: Completed 03-lists-01-PLAN.md — schema confirmed, plan complete
+last_updated: "2026-03-18T10:24:51.166Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
@@ -65,6 +65,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-social-graph P06 | 2min | 0 tasks | 0 files |
 | Phase 02-social-graph P06 | 5min | 1 tasks | 0 files |
 | Phase 03-lists P01 | 8min | 3 tasks | 3 files |
+| Phase 03-lists P01 | 10min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,7 @@ Recent decisions affecting current work:
 - [Phase 03-lists]: item_count is optional on List type — not every query includes nested count; populated via list_items(count)
 - [Phase 03-lists]: is_wishlist boolean on lists table identifies built-in wishlist — no separate WishlistItem type needed
 - [Phase 03-lists]: ts-jest 29 + jest 30 silently resolves missing imports to undefined — RED baseline confirmed at stub-contract level, not import-failure level
+- [Phase 03-lists]: Migration SQL committed to supabase/migrations/ and confirmed applied — lists and list_items tables live in Supabase with RLS enabled
 
 ### Pending Todos
 
@@ -118,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T10:11:44.221Z
-Stopped at: Completed 03-lists-01-PLAN.md — awaiting human Supabase table confirmation
+Last session: 2026-03-18T10:24:51.163Z
+Stopped at: Completed 03-lists-01-PLAN.md — schema confirmed, plan complete
 Resume file: None
