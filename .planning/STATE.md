@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 3 context gathered
-last_updated: "2026-03-17T10:33:29.635Z"
+stopped_at: Completed 03-lists-01-PLAN.md — awaiting human Supabase table confirmation
+last_updated: "2026-03-18T10:11:44.223Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 13
-  completed_plans: 13
+  total_plans: 19
+  completed_plans: 14
   percent: 0
 ---
 
@@ -64,6 +64,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-social-graph P05 | 3min | 2 tasks | 4 files |
 | Phase 02-social-graph P06 | 2min | 0 tasks | 0 files |
 | Phase 02-social-graph P06 | 5min | 1 tasks | 0 files |
+| Phase 03-lists P01 | 8min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 02-social-graph]: getProfileByUsername updated to select user_id — required for isOwnProfile and follow operations at /users/[username]
 - [Phase 02-social-graph]: Plan 02-06 is a human-verification-only checkpoint — no code produced, 33 automated tests passing before human review
 - [Phase 02-social-graph]: Human reviewer approved all four SOCL requirements (SOCL-01 through SOCL-04) — Phase 2 Social Graph is fully complete
+- [Phase 03-lists]: item_count is optional on List type — not every query includes nested count; populated via list_items(count)
+- [Phase 03-lists]: is_wishlist boolean on lists table identifies built-in wishlist — no separate WishlistItem type needed
+- [Phase 03-lists]: ts-jest 29 + jest 30 silently resolves missing imports to undefined — RED baseline confirmed at stub-contract level, not import-failure level
 
 ### Pending Todos
 
@@ -114,6 +118,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T10:33:29.626Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-lists/03-CONTEXT.md
+Last session: 2026-03-18T10:11:44.221Z
+Stopped at: Completed 03-lists-01-PLAN.md — awaiting human Supabase table confirmation
+Resume file: None

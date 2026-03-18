@@ -28,10 +28,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Lists
 
-- [ ] **LIST-01**: Kullanıcı bir mekanı tek tıkla "Gideceğim Yerler" listesine ekleyip çıkarabilir
-- [ ] **LIST-02**: Kullanıcı isimlendirilmiş özel liste oluşturabilir (örn. "En iyi kahvaltılıklar")
-- [ ] **LIST-03**: Kullanıcı oluşturduğu listelere mekan ekleyip çıkarabilir
-- [ ] **LIST-04**: Kullanıcı listesini herkese açık yapabilir; başkaları profilinde görebilir
+- [x] **LIST-01**: Kullanıcı bir mekanı tek tıkla "Gideceğim Yerler" listesine ekleyip çıkarabilir
+- [x] **LIST-02**: Kullanıcı isimlendirilmiş özel liste oluşturabilir (örn. "En iyi kahvaltılıklar")
+- [x] **LIST-03**: Kullanıcı oluşturduğu listelere mekan ekleyip çıkarabilir
+- [x] **LIST-04**: Kullanıcı listesini herkese açık yapabilir; başkaları profilinde görebilir
 
 ### Exploration
 
@@ -90,10 +90,10 @@ Which phases cover which requirements. Validated during roadmap creation.
 | SOCL-02 | Phase 2 | Complete |
 | SOCL-03 | Phase 2 | Complete |
 | SOCL-04 | Phase 2 | Complete |
-| LIST-01 | Phase 3 | Pending |
-| LIST-02 | Phase 3 | Pending |
-| LIST-03 | Phase 3 | Pending |
-| LIST-04 | Phase 3 | Pending |
+| LIST-01 | Phase 3 | Complete |
+| LIST-02 | Phase 3 | Complete |
+| LIST-03 | Phase 3 | Complete |
+| LIST-04 | Phase 3 | Complete |
 | XPLR-01 | Phase 4 | Pending |
 | XPLR-02 | Phase 4 | Pending |
 | XPLR-03 | Phase 5 | Pending |
