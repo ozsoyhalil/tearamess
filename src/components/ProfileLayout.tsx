@@ -56,17 +56,17 @@ export function ProfileLayout({
           <img
             src={profile.avatar_url}
             alt={profile.display_name ?? ''}
-            className="w-20 h-20 rounded-full object-cover shrink-0"
+            className="w-24 h-24 rounded-full object-cover shrink-0"
           />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-[var(--color-caramel)] flex items-center justify-center text-white text-2xl font-semibold shrink-0">
+          <div className="w-24 h-24 rounded-full bg-[var(--color-caramel)] flex items-center justify-center text-white text-3xl font-semibold shrink-0">
             {initials}
           </div>
         )}
 
         {/* Info */}
         <div className="flex-1 min-w-0 text-center sm:text-left">
-          <h1 className="text-xl font-bold text-coffee truncate">
+          <h1 className="text-2xl font-bold text-coffee truncate">
             {profile.display_name ?? profile.username ?? 'Kullanıcı'}
           </h1>
           {profile.username && (
@@ -95,7 +95,7 @@ export function ProfileLayout({
           {isOwnProfile ? (
             <Link
               href="/profile/edit"
-              className="inline-block px-4 py-1.5 rounded-full text-sm font-medium border border-warmgray-300 text-warmgray-600 hover:bg-warmgray-50 transition-colors"
+              className="inline-block px-5 py-2 rounded-full text-sm font-semibold bg-warmgray-100 hover:bg-warmgray-200 text-espresso transition-all duration-300 border border-warmgray-300"
             >
               Profili D&uuml;zenle
             </Link>
@@ -116,7 +116,7 @@ export function ProfileLayout({
           <button
             key={tab.key}
             onClick={() => onTabChange(tab.key)}
-            className={`px-5 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
               activeTab === tab.key
                 ? 'border-[var(--color-caramel)] text-[var(--color-caramel)]'
                 : 'border-transparent text-warmgray-500 hover:text-coffee'

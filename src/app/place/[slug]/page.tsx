@@ -17,6 +17,7 @@ import { reviewSchema, ReviewInput } from '@/lib/schemas/reviews'
 import { WishlistButton } from '@/components/WishlistButton'
 import { ListItemSelector } from '@/components/ListItemSelector'
 import { useAuth } from '@/context/AuthContext'
+import { CAT_GRADIENT, CAT_EMOJI, DEFAULT_GRADIENT, resolvePhotoSrc } from '@/components/PlaceCard'
 import type { Review } from '@/types/review'
 import type { Place } from '@/types/place'
 
@@ -137,13 +138,38 @@ export default function PlacePage() {
     )
   }
 
+  const heroPhotoSrc = place.cover_image_url ? resolvePhotoSrc(place.cover_image_url) : null
+
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-10">
 
-        {/* Place info card */}
-        <Card variant="default" className="p-8 mb-6">
+      {/* Hero — full width, outside max-w container */}
+      {heroPhotoSrc ? (
+        <div className="relative w-full h-64 overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={heroPhotoSrc}
+            alt={place.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        </div>
+      ) : (
+        <div
+          className="w-full h-40"
+          style={{ background: CAT_GRADIENT[place.category] ?? DEFAULT_GRADIENT }}
+        >
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-7xl opacity-20">{CAT_EMOJI[place.category] ?? '📍'}</span>
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-3xl mx-auto px-4 pt-0 pb-10">
+
+        {/* Place info card — -mt-8 overlap effect */}
+        <Card variant="default" className="p-8 mb-6 -mt-8 relative z-10">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex-1 min-w-0">
               <span
@@ -290,7 +316,7 @@ export default function PlacePage() {
               {reviews.map(review => (
                 <div
                   key={review.id}
-                  className="rounded-xl p-5 bg-warmgray-100"
+                  className="rounded-xl p-5 bg-white border border-warmgray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
                 >
                   <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
                     <div className="flex items-center gap-3">

@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import { PlaceCard } from '@/components/PlaceCard'
@@ -22,11 +23,15 @@ type SearchHit = {
   city: string
 }
 
-export default function ExplorePage() {
+function ExploreContent() {
+  const params = useSearchParams()
+  const initialCategory = params.get('category') ?? ''
+
   const [places, setPlaces] = useState<Place[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('')
+  const [activeCategory, setActiveCategory] = useState(initialCategory)
   const [cityFilter, setCityFilter] = useState('')
+  const [sortBy, setSortBy] = useState<'az' | 'rating' | 'recent'>('recent')
   const [cities, setCities] = useState<string[]>([])
 
   const [query, setQuery] = useState('')
@@ -75,6 +80,12 @@ export default function ExplorePage() {
     return matchCat && matchCity
   })
 
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortBy === 'az') return a.name.localeCompare(b.name, 'tr')
+    if (sortBy === 'rating') return (b.avg_rating ?? 0) - (a.avg_rating ?? 0)
+    return 0 // 'recent': backend order preserved
+  })
+
   return (
     <>
       <Navbar />
@@ -94,7 +105,7 @@ export default function ExplorePage() {
               onChange={e => setQuery(e.target.value)}
               onFocus={() => hits.length > 0 && setShowDrop(true)}
               placeholder="Mekan ara..."
-              className="text-base"
+              className="text-lg py-4 px-5 h-auto"
             />
             {searchLoading && (
               <div className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
@@ -164,7 +175,7 @@ export default function ExplorePage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat === 'Tümü' ? '' : (cat === activeCategory ? '' : cat))}
-                className={`px-4 py-2 rounded-full text-sm whitespace-nowrap font-medium transition-all duration-200 cursor-pointer ${
+                className={`px-5 py-2.5 rounded-full text-base whitespace-nowrap font-medium transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'bg-caramel text-cream'
                     : 'bg-warmgray-100 text-coffee hover:bg-warmgray-200'
@@ -177,19 +188,30 @@ export default function ExplorePage() {
           })}
         </div>
 
-        {/* Count + city filter */}
-        <div className="flex items-center justify-between mb-6 mt-4">
+        {/* Count + city filter + sort */}
+        <div className="flex items-center justify-between mb-6 mt-4 gap-3 flex-wrap">
           <p className="text-sm font-medium text-warmgray-500">
-            {loading ? '…' : `${filtered.length} mekan`}
+            {loading ? '…' : `${sorted.length} mekan`}
           </p>
-          <select
-            value={cityFilter}
-            onChange={e => setCityFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg text-sm outline-none transition-colors cursor-pointer bg-white border border-warmgray-300 text-espresso"
-          >
-            <option value="">Tüm Şehirler</option>
-            {cities.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <div className="flex items-center gap-2">
+            <select
+              value={cityFilter}
+              onChange={e => setCityFilter(e.target.value)}
+              className="px-3 py-2 rounded-lg text-sm outline-none transition-colors cursor-pointer bg-white border border-warmgray-300 text-espresso"
+            >
+              <option value="">Tüm Şehirler</option>
+              {cities.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as 'az' | 'rating' | 'recent')}
+              className="px-3 py-2 rounded-lg text-sm outline-none transition-colors cursor-pointer bg-white border border-warmgray-300 text-espresso"
+            >
+              <option value="recent">Yeniden Eskiye</option>
+              <option value="rating">En Yüksek Puan</option>
+              <option value="az">A → Z</option>
+            </select>
+          </div>
         </div>
 
         {/* Grid */}
@@ -197,7 +219,7 @@ export default function ExplorePage() {
           <div className="flex justify-center py-20">
             <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
           </div>
-        ) : filtered.length === 0 ? (
+        ) : sorted.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🏛️</div>
             <p className="text-lg font-medium mb-1 text-coffee">
@@ -217,7 +239,7 @@ export default function ExplorePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map(place => (
+            {sorted.map(place => (
               <Link key={place.id} href={`/place/${place.slug}`}>
                 <PlaceCard place={place} />
               </Link>
@@ -226,5 +248,20 @@ export default function ExplorePage() {
         )}
       </main>
     </>
+  )
+}
+
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Navbar />
+        <div className="flex justify-center py-20">
+          <div className="w-8 h-8 border-2 rounded-full animate-spin border-caramel border-t-transparent" />
+        </div>
+      </>
+    }>
+      <ExploreContent />
+    </Suspense>
   )
 }

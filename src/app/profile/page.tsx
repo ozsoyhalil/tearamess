@@ -149,7 +149,7 @@ export default function ProfilePage() {
                 visits.map((visit) => (
                   <div
                     key={visit.id}
-                    className="flex items-start justify-between gap-3 p-4 rounded-xl border border-warmgray-100 hover:border-warmgray-200 transition-colors"
+                    className="flex items-start justify-between gap-3 p-4 rounded-xl border border-warmgray-200 bg-white transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
                   >
                     <div>
                       {visit.places ? (
