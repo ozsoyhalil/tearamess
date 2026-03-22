@@ -49,7 +49,7 @@ export const CAT_EMOJI: Record<string, string> = {
 
 // ─── Photo URL helper ─────────────────────────────────────────────────────────
 
-function resolvePhotoSrc(url: string): string {
+export function resolvePhotoSrc(url: string): string {
   // Stored as resource name "places/xxx/photos/yyy" → proxy
   if (url.startsWith('places/')) {
     return `/api/photo?name=${encodeURIComponent(url)}`
@@ -80,9 +80,9 @@ export function PlaceCard({ place, className = '' }: PlaceCardProps) {
     : null
 
   return (
-    <Card variant="interactive" className={`overflow-hidden ${className}`}>
+    <Card variant="interactive" className={`overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${className}`}>
       {/* Top: photo or category gradient */}
-      <div className="h-40 relative overflow-hidden flex items-center justify-center">
+      <div className="h-48 relative overflow-hidden flex items-center justify-center">
         {photoSrc ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -92,7 +92,7 @@ export function PlaceCard({ place, className = '' }: PlaceCardProps) {
               className="absolute inset-0 w-full h-full object-cover"
               onError={() => setImgFailed(true)}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
           </>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center" style={{ background: gradient }}>

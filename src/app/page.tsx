@@ -9,10 +9,21 @@ import { PlaceCard } from '@/components/PlaceCard'
 import { useAuth } from '@/context/AuthContext'
 import { getFeed } from '@/lib/services/feed'
 import { getTopPlaces, getRecentPlaces } from '@/lib/services/places'
+import { supabase } from '@/lib/supabase'
 import type { FeedItem } from '@/types/feed'
 import type { Place } from '@/types/place'
 
 const PAGE_SIZE = 20
+
+type RecentReview = {
+  id: string
+  rating: number
+  content: string | null
+  created_at: string
+  profiles: { display_name: string | null; username: string | null } | null
+  place_name: string | null
+  place_slug: string | null
+}
 
 // ─── Landing page (logged-out) ───────────────────────────────────────────────
 
@@ -105,14 +116,34 @@ function LandingPage() {
 function DiscoverSection() {
   const [topPlaces, setTopPlaces] = useState<Place[]>([])
   const [recentPlaces, setRecentPlaces] = useState<Place[]>([])
+  const [recentReviews, setRecentReviews] = useState<RecentReview[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([getTopPlaces(6), getRecentPlaces(6)]).then(([top, recent]) => {
+    const load = async () => {
+      const [top, recent] = await Promise.all([getTopPlaces(6), getRecentPlaces(6)])
       setTopPlaces(top.data ?? [])
       setRecentPlaces(recent.data ?? [])
+
+      const { data: reviewData } = await supabase
+        .from('reviews')
+        .select('id, rating, content, created_at, profiles(display_name, username), places(name, slug)')
+        .order('created_at', { ascending: false })
+        .limit(5)
+
+      setRecentReviews((reviewData ?? []).map((r: Record<string, unknown>) => ({
+        id: r.id as string,
+        rating: r.rating as number,
+        content: r.content as string | null,
+        created_at: r.created_at as string,
+        profiles: r.profiles as { display_name: string | null; username: string | null } | null,
+        place_name: (r.places as { name?: string; slug?: string } | null)?.name ?? null,
+        place_slug: (r.places as { name?: string; slug?: string } | null)?.slug ?? null,
+      })))
+
       setLoading(false)
-    })
+    }
+    load()
   }, [])
 
   if (loading) {
@@ -125,13 +156,45 @@ function DiscoverSection() {
 
   return (
     <div className="py-4">
-      {/* Popular places */}
+      {/* Category explore grid */}
+      <section className="mb-10">
+        <h2 className="text-lg font-bold text-espresso mb-4">Kategorilere Göre Keşfet</h2>
+        <div className="grid grid-cols-4 md:grid-cols-5 gap-3">
+          {[
+            { label: 'Kafe', emoji: '☕' },
+            { label: 'Restoran', emoji: '🍽️' },
+            { label: 'Park', emoji: '🌿' },
+            { label: 'Müze', emoji: '🏛️' },
+            { label: 'Bar', emoji: '🍷' },
+            { label: 'Kütüphane', emoji: '📚' },
+            { label: 'Tarihi Mekan', emoji: '🏰' },
+            { label: 'Teras/Çatı', emoji: '🌇' },
+            { label: 'Sahil/Plaj', emoji: '🏖️' },
+            { label: 'Kitabevi', emoji: '📖' },
+          ].map(({ label, emoji }) => (
+            <Link
+              key={label}
+              href={`/explore?category=${encodeURIComponent(label)}`}
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-warmgray-100 hover:bg-warmgray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 text-center"
+            >
+              <span className="text-2xl">{emoji}</span>
+              <span className="text-xs font-medium text-espresso leading-tight">{label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Popular places — horizontal carousel */}
       {topPlaces.length > 0 && (
         <section className="mb-10">
           <h2 className="text-lg font-bold text-espresso mb-4">Popüler Mekanlar</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex gap-4 overflow-x-auto pb-3 scrollbar-hide snap-x snap-mandatory -mx-4 px-4">
             {topPlaces.map(place => (
-              <Link key={place.id} href={`/place/${place.slug}`}>
+              <Link
+                key={place.id}
+                href={`/place/${place.slug}`}
+                className="min-w-[280px] shrink-0 snap-start"
+              >
                 <PlaceCard place={place} />
               </Link>
             ))}
@@ -139,15 +202,63 @@ function DiscoverSection() {
         </section>
       )}
 
-      {/* Recently added */}
+      {/* Recently added — horizontal carousel */}
       {recentPlaces.length > 0 && (
         <section className="mb-10">
           <h2 className="text-lg font-bold text-espresso mb-4">Yeni Eklenen Mekanlar</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex gap-4 overflow-x-auto pb-3 scrollbar-hide snap-x snap-mandatory -mx-4 px-4">
             {recentPlaces.map(place => (
-              <Link key={place.id} href={`/place/${place.slug}`}>
+              <Link
+                key={place.id}
+                href={`/place/${place.slug}`}
+                className="min-w-[280px] shrink-0 snap-start"
+              >
                 <PlaceCard place={place} />
               </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Recent reviews */}
+      {recentReviews.length > 0 && (
+        <section className="mb-10">
+          <h2 className="text-lg font-bold text-espresso mb-4">Son Değerlendirmeler</h2>
+          <div className="space-y-3">
+            {recentReviews.map(review => (
+              <div
+                key={review.id}
+                className="rounded-xl p-4 border border-warmgray-200 bg-white transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+              >
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-caramel text-cream flex items-center justify-center text-sm font-bold shrink-0">
+                      {(review.profiles?.display_name || review.profiles?.username || '?')[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <span className="text-sm font-semibold text-espresso">
+                        {review.profiles?.display_name || review.profiles?.username || 'Anonim'}
+                      </span>
+                      {review.place_name && review.place_slug && (
+                        <Link href={`/place/${review.place_slug}`} className="block text-xs text-caramel hover:underline">
+                          {review.place_name}
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="text-sm font-bold text-caramel">{review.rating} ★</div>
+                    <div className="text-xs text-warmgray-400">
+                      {new Date(review.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                    </div>
+                  </div>
+                </div>
+                {review.content && (
+                  <p className="text-sm text-coffee leading-relaxed line-clamp-2 pl-10">
+                    {review.content}
+                  </p>
+                )}
+              </div>
             ))}
           </div>
         </section>
@@ -171,7 +282,7 @@ function DiscoverSection() {
 
 // ─── Feed page (logged-in) ────────────────────────────────────────────────────
 
-function FeedPage({ userId }: { userId: string }) {
+function FeedPage({ userId, displayName }: { userId: string; displayName: string }) {
   const [items, setItems] = useState<FeedItem[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -242,6 +353,16 @@ function FeedPage({ userId }: { userId: string }) {
       <>
         <Navbar />
         <main className="max-w-2xl mx-auto px-4 py-8">
+          {/* Hero greeting */}
+          <div
+            className="rounded-2xl p-6 mb-6"
+            style={{ background: 'linear-gradient(135deg, #F5EDE4 0%, #FFF8F0 100%)' }}
+          >
+            <p className="text-xl font-bold text-espresso">
+              Merhaba{displayName ? `, ${displayName}` : ''} 👋
+            </p>
+            <p className="text-sm mt-1 text-coffee">Bugün nereye gidiyoruz?</p>
+          </div>
           <DiscoverSection />
         </main>
       </>
@@ -252,6 +373,17 @@ function FeedPage({ userId }: { userId: string }) {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-8">
+        {/* Hero greeting */}
+        <div
+          className="rounded-2xl p-6 mb-6"
+          style={{ background: 'linear-gradient(135deg, #F5EDE4 0%, #FFF8F0 100%)' }}
+        >
+          <p className="text-xl font-bold text-espresso">
+            Merhaba{displayName ? `, ${displayName}` : ''} 👋
+          </p>
+          <p className="text-sm mt-1 text-coffee">Bugün nereye gidiyoruz?</p>
+        </div>
+
         {loading ? (
           <FeedSkeleton count={5} />
         ) : (
@@ -302,5 +434,11 @@ export default function Home() {
     return <LandingPage />
   }
 
-  return <FeedPage userId={user.id} />
+  const displayName: string =
+    user.user_metadata?.full_name as string ??
+    user.user_metadata?.name as string ??
+    user.email?.split('@')[0] ??
+    ''
+
+  return <FeedPage userId={user.id} displayName={displayName} />
 }
