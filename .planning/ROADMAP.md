@@ -99,7 +99,16 @@ Plans:
   1. A user can check in to a place and the check-in is recorded with a timestamp
   2. After check-in, the user's Ankara grid map shows the corresponding cell colored in, reflecting that visit
   3. A user can open their grid map and see all previously visited cells painted, with the map state persisting across sessions
-**Plans**: TBD
+**Plans**: 7 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Wave 1: Install deps (react-leaflet, sonner), DB migration, create TDD RED stubs
+- [ ] 04-02-PLAN.md — Wave 2: TDD implement grid math utilities (VisitWithCoords type + src/lib/grid.ts)
+- [ ] 04-03-PLAN.md — Wave 2: TDD implement checkIns.ts service + extend visits.ts with getUserVisitsWithCoords
+- [ ] 04-04-PLAN.md — Wave 3: Build CheckInButton component + add Sonner Toaster to layout
+- [ ] 04-05-PLAN.md — Wave 3: Build /grid page and GridMap component (react-leaflet, SSR-safe)
+- [ ] 04-06-PLAN.md — Wave 4: Wire CheckInButton into place detail + /grid link in Navbar + ProfileLayout
+- [ ] 04-07-PLAN.md — Wave 5: Human verification checkpoint for XPLR-01 and XPLR-02
 
 ### Phase 5: Stats + Coverage
 **Goal**: Users can see how much of Ankara they have explored and a full breakdown of their visit patterns — turning exploration into a measurable personal achievement
@@ -123,5 +132,5 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 4/4 | Complete   | 2026-03-14 |
 | 2. Social Graph | 5/6 | In Progress|  |
 | 3. Lists | 6/6 | Complete   | 2026-03-18 |
-| 4. Check-in + Grid | 0/? | Not started | - |
+| 4. Check-in + Grid | 0/7 | Not started | - |
 | 5. Stats + Coverage | 0/? | Not started | - |
