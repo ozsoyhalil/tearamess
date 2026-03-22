@@ -33,3 +33,19 @@ export async function getProfileByUsername(
   if (!data) return { data: null, error: 'Kullanıcı bulunamadı' }
   return { data: data as Profile, error: null }
 }
+
+export async function updateProfile(
+  userId: string,
+  updates: { display_name?: string; avatar_url?: string; bio?: string }
+): Promise<{ error: string | null }> {
+  const { error } = await supabase
+    .from('profiles')
+    .upsert({
+      user_id: userId,
+      ...updates,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' })
+
+  if (error) return { error: error.message }
+  return { error: null }
+}
