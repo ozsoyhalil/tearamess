@@ -35,8 +35,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Exploration
 
-- [ ] **XPLR-01**: Kullanıcı bir mekana check-in yapabilir
-- [ ] **XPLR-02**: Check-in yapılan konumdan Ankara grid hücresi hesaplanır ve kullanıcı haritasında işaretlenir
+- [x] **XPLR-01**: Kullanıcı bir mekana check-in yapabilir
+- [x] **XPLR-02**: Check-in yapılan konumdan Ankara grid hücresi hesaplanır ve kullanıcı haritasında işaretlenir
 - [ ] **XPLR-03**: Kullanıcı Ankara'nın yüzde kaçını keşfettiğini görebilir (boyalı hücre / toplam hücre)
 - [ ] **XPLR-04**: Kullanıcı istatistik sayfasında toplam ziyaret sayısı, kategori dağılımı, aktiflik takvimi ve en çok gittiği bölgeleri görebilir
 
@@ -94,8 +94,8 @@ Which phases cover which requirements. Validated during roadmap creation.
 | LIST-02 | Phase 3 | Complete |
 | LIST-03 | Phase 3 | Complete |
 | LIST-04 | Phase 3 | Complete |
-| XPLR-01 | Phase 4 | Pending |
-| XPLR-02 | Phase 4 | Pending |
+| XPLR-01 | Phase 4 | Complete |
+| XPLR-02 | Phase 4 | Complete |
 | XPLR-03 | Phase 5 | Pending |
 | XPLR-04 | Phase 5 | Pending |
 

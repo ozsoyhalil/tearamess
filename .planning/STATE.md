@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 4 context gathered
-last_updated: "2026-03-22T15:21:25.142Z"
+stopped_at: Completed 04-check-in-grid-04-01-PLAN.md
+last_updated: "2026-03-23T08:32:52.854Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 19
-  completed_plans: 19
+  total_plans: 26
+  completed_plans: 20
   percent: 0
 ---
 
@@ -71,6 +71,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-lists P04 | 8min | 2 tasks | 4 files |
 | Phase 03-lists P05 | 8min | 2 tasks | 3 files |
 | Phase 03-lists P06 | 15min | 3 tasks | 2 files |
+| Phase 04-check-in-grid P01 | 8min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,9 @@ Recent decisions affecting current work:
 - [Phase 03-lists]: Lazy tab load pattern applied in profile pages: useEffect gated on activeTab + loaded flag to prevent eager fetches
 - [Phase 03-lists]: getUserLists deduplicates wishlist rows client-side via filter — first row (is_wishlist DESC) is kept, extras dropped
 - [Phase 03-lists]: Delete affordance added to profile Lists grid for non-wishlist lists; display name falls back to auth user_metadata then email prefix when profiles row is absent
+- [Phase 04-check-in-grid]: react-leaflet@5 installed — compatible with React 19 and Next 16; no peer dep errors
+- [Phase 04-check-in-grid]: visits unique constraint dropped to allow multiple check-in rows per user+place (non-idempotent checkIn)
+- [Phase 04-check-in-grid]: grid.test.ts derives expected row/col from GRID_BOUNDS constants at test runtime — not hardcoded
 
 ### Pending Todos
 
@@ -141,6 +145,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-22T15:21:25.134Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-check-in-grid/04-CONTEXT.md
+Last session: 2026-03-23T08:32:52.852Z
+Stopped at: Completed 04-check-in-grid-04-01-PLAN.md
+Resume file: None
