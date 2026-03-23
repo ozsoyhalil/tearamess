@@ -93,12 +93,20 @@ export function ProfileLayout({
 
           {/* Action */}
           {isOwnProfile ? (
-            <Link
-              href="/profile/edit"
-              className="inline-block px-5 py-2 rounded-full text-sm font-semibold bg-warmgray-100 hover:bg-warmgray-200 text-espresso transition-all duration-300 border border-warmgray-300"
-            >
-              Profili D&uuml;zenle
-            </Link>
+            <div className="flex items-center gap-3 flex-wrap justify-center sm:justify-start">
+              <Link
+                href="/profile/edit"
+                className="inline-block px-5 py-2 rounded-full text-sm font-semibold bg-warmgray-100 hover:bg-warmgray-200 text-espresso transition-all duration-300 border border-warmgray-300"
+              >
+                Profili D&uuml;zenle
+              </Link>
+              <Link
+                href="/grid"
+                className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium border border-warmgray-200 text-warmgray-600 hover:bg-warmgray-50 transition-all duration-200"
+              >
+                <span>🗺️</span> Haritam
+              </Link>
+            </div>
           ) : (
             userId && (
               <FollowButton
