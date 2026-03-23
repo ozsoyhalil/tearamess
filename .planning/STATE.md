@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-check-in-grid-04-03-PLAN.md
-last_updated: "2026-03-23T08:45:57.613Z"
+stopped_at: Completed 04-check-in-grid-04-04-PLAN.md
+last_updated: "2026-03-23T08:55:59.293Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 26
-  completed_plans: 22
+  completed_plans: 23
   percent: 0
 ---
 
@@ -74,6 +74,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-check-in-grid P01 | 8min | 2 tasks | 5 files |
 | Phase 04-check-in-grid P02 | 6min | 3 tasks | 3 files |
 | Phase 04-check-in-grid P03 | 5min | 2 tasks | 2 files |
+| Phase 04-check-in-grid P04 | 4min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,7 @@ Recent decisions affecting current work:
 - [Phase 04-check-in-grid]: grid.ts imports only VisitWithCoords type (erased at compile time) — zero runtime dependencies, pure arithmetic only
 - [Phase 04-check-in-grid]: checkIn() uses INSERT (not upsert) — multiple calls on same user+place produce multiple rows; non-idempotent by design
 - [Phase 04-check-in-grid]: getUserVisitsWithCoords selects explicit columns including latitude/longitude from joined places table for grid rendering
+- [Phase 04-check-in-grid]: checkedIn state is local and resets on reload — non-idempotent multiple check-ins per session allowed by design
 
 ### Pending Todos
 
@@ -151,6 +153,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-23T08:45:57.611Z
-Stopped at: Completed 04-check-in-grid-04-03-PLAN.md
+Last session: 2026-03-23T08:55:59.290Z
+Stopped at: Completed 04-check-in-grid-04-04-PLAN.md
 Resume file: None
