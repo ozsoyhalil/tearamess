@@ -132,5 +132,5 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 4/4 | Complete   | 2026-03-14 |
 | 2. Social Graph | 5/6 | In Progress|  |
 | 3. Lists | 6/6 | Complete   | 2026-03-18 |
-| 4. Check-in + Grid | 5/7 | In Progress|  |
+| 4. Check-in + Grid | 6/7 | In Progress|  |
 | 5. Stats + Coverage | 0/? | Not started | - |
