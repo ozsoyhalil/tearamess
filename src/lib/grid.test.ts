@@ -2,13 +2,12 @@ import {
   latLngToCellKey,
   cellKeyToBounds,
   isInAnkaraBounds,
+  buildCellCounts,
   GRID_BOUNDS,
   CELL_LAT,
   CELL_LNG,
 } from './grid'
-
-// buildCellCounts is a pure utility — import once implemented
-// For now test the core math functions
+import type { VisitWithCoords } from '@/types/visit'
 
 describe('latLngToCellKey', () => {
   it('returns a string in row:col format', () => {
@@ -34,6 +33,13 @@ describe('cellKeyToBounds', () => {
     expect(typeof bounds[0][0]).toBe('number')
     expect(typeof bounds[1][1]).toBe('number')
   })
+
+  it('returns NE corner strictly above SW corner', () => {
+    const bounds = cellKeyToBounds('38:66')
+    const [sw, ne] = bounds
+    expect(ne[0]).toBeGreaterThan(sw[0]) // neLat > swLat
+    expect(ne[1]).toBeGreaterThan(sw[1]) // neLng > swLng
+  })
 })
 
 describe('isInAnkaraBounds', () => {
@@ -47,8 +53,58 @@ describe('isInAnkaraBounds', () => {
 })
 
 describe('buildCellCounts', () => {
-  it('is tested once implemented — stub test to establish RED', () => {
-    // This test will pass trivially; real tests added when function is implemented
-    expect(true).toBe(true)
+  const makeVisit = (lat: number | null, lng: number | null): VisitWithCoords => ({
+    id: 'v1',
+    user_id: 'u1',
+    place_id: 'p1',
+    visited_at: '2026-01-01T00:00:00Z',
+    places: {
+      id: 'p1',
+      name: 'Test Place',
+      slug: 'test-place',
+      latitude: lat,
+      longitude: lng,
+    },
+  })
+
+  it('counts two visits at the same coordinates as 2 in that cell', () => {
+    const lat = 39.9208
+    const lng = 32.8541
+    const visits: VisitWithCoords[] = [makeVisit(lat, lng), makeVisit(lat, lng)]
+    const counts = buildCellCounts(visits)
+    const key = latLngToCellKey(lat, lng)
+    expect(counts[key]).toBe(2)
+  })
+
+  it('skips visits where latitude is null', () => {
+    const visits: VisitWithCoords[] = [makeVisit(null, 32.8541)]
+    const counts = buildCellCounts(visits)
+    expect(Object.keys(counts)).toHaveLength(0)
+  })
+
+  it('skips visits where longitude is null', () => {
+    const visits: VisitWithCoords[] = [makeVisit(39.9208, null)]
+    const counts = buildCellCounts(visits)
+    expect(Object.keys(counts)).toHaveLength(0)
+  })
+
+  it('skips visits outside Ankara bounds', () => {
+    // Istanbul coordinates
+    const visits: VisitWithCoords[] = [makeVisit(41.0082, 28.9784)]
+    const counts = buildCellCounts(visits)
+    expect(Object.keys(counts)).toHaveLength(0)
+  })
+
+  it('aggregates visits in different cells independently', () => {
+    const lat1 = 39.9208
+    const lng1 = 32.8541
+    const lat2 = 39.85
+    const lng2 = 32.75
+    const visits: VisitWithCoords[] = [makeVisit(lat1, lng1), makeVisit(lat2, lng2)]
+    const counts = buildCellCounts(visits)
+    const key1 = latLngToCellKey(lat1, lng1)
+    const key2 = latLngToCellKey(lat2, lng2)
+    expect(counts[key1]).toBe(1)
+    expect(counts[key2]).toBe(1)
   })
 })
