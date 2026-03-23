@@ -15,6 +15,7 @@ import { getReviewsForPlace, createReview } from '@/lib/services/reviews'
 import { isPlaceInWishlist } from '@/lib/services/lists'
 import { reviewSchema, ReviewInput } from '@/lib/schemas/reviews'
 import { WishlistButton } from '@/components/WishlistButton'
+import { CheckInButton } from '@/components/CheckInButton'
 import { ListItemSelector } from '@/components/ListItemSelector'
 import { useAuth } from '@/context/AuthContext'
 import { CAT_GRADIENT, CAT_EMOJI, DEFAULT_GRADIENT, resolvePhotoSrc } from '@/components/PlaceCard'
@@ -188,6 +189,7 @@ export default function PlacePage() {
               {/* Wishlist + list actions */}
               <div className="flex items-center gap-2 mt-3 flex-wrap relative">
                 <WishlistButton placeId={place.id} initialIsWishlisted={isWishlisted} />
+                <CheckInButton placeId={place.id} />
                 {user && (
                   <>
                     <button

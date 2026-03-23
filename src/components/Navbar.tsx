@@ -38,6 +38,12 @@ export default function Navbar() {
                 + Mekan Ekle
               </Link>
               <Link
+                href="/grid"
+                className="text-sm flex items-center gap-1.5 transition-colors duration-200 text-warmgray-300 hover:text-cream"
+              >
+                <span>🗺️</span> Harita
+              </Link>
+              <Link
                 href="/profile"
                 className="text-sm transition-colors duration-200 text-warmgray-300 hover:text-cream"
               >
