@@ -13,3 +13,20 @@ export interface Visit {
     city?: string
   } | null
 }
+
+export interface VisitWithCoords {
+  id: string
+  user_id: string
+  place_id: string
+  visited_at: string
+  created_at?: string
+  places?: {
+    id: string
+    name: string
+    slug: string
+    category?: string
+    neighborhood?: string
+    latitude: number | null
+    longitude: number | null
+  } | null
+}
