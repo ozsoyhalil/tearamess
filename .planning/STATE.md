@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-check-in-grid-04-01-PLAN.md
-last_updated: "2026-03-23T08:32:52.854Z"
+stopped_at: Completed 04-check-in-grid-04-02-PLAN.md
+last_updated: "2026-03-23T08:45:47.051Z"
 last_activity: 2026-03-13 — Roadmap revised; Phase 0 (Polish & Bugfix) inserted before Foundation; 18 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 26
-  completed_plans: 20
+  completed_plans: 22
   percent: 0
 ---
 
@@ -72,6 +72,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-lists P05 | 8min | 2 tasks | 3 files |
 | Phase 03-lists P06 | 15min | 3 tasks | 2 files |
 | Phase 04-check-in-grid P01 | 8min | 2 tasks | 5 files |
+| Phase 04-check-in-grid P02 | 6min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -125,6 +126,8 @@ Recent decisions affecting current work:
 - [Phase 04-check-in-grid]: react-leaflet@5 installed — compatible with React 19 and Next 16; no peer dep errors
 - [Phase 04-check-in-grid]: visits unique constraint dropped to allow multiple check-in rows per user+place (non-idempotent checkIn)
 - [Phase 04-check-in-grid]: grid.test.ts derives expected row/col from GRID_BOUNDS constants at test runtime — not hardcoded
+- [Phase 04-check-in-grid]: VisitWithCoords uses latitude/longitude: number | null on places join — matches DB column type, null explicitly signals missing coordinate vs undefined for unselected field
+- [Phase 04-check-in-grid]: grid.ts imports only VisitWithCoords type (erased at compile time) — zero runtime dependencies, pure arithmetic only
 
 ### Pending Todos
 
@@ -145,6 +148,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-23T08:32:52.852Z
-Stopped at: Completed 04-check-in-grid-04-01-PLAN.md
+Last session: 2026-03-23T08:45:47.049Z
+Stopped at: Completed 04-check-in-grid-04-02-PLAN.md
 Resume file: None
