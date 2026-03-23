@@ -38,5 +38,5 @@ export async function getUserVisitsWithCoords(
     .eq('user_id', userId)
 
   if (error) return { data: null, error: error.message }
-  return { data: (data ?? []) as VisitWithCoords[], error: null }
+  return { data: (data ?? []) as unknown as VisitWithCoords[], error: null }
 }
