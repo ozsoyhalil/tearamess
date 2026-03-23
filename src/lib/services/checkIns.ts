@@ -8,6 +8,9 @@ export async function checkIn(
     .from('visits')
     .insert({ user_id: userId, place_id: placeId, visited_at: new Date().toISOString() })
 
-  if (error) return { data: null, error: error.message }
+  if (error) {
+    console.error('[checkIn] Supabase error:', error)
+    return { data: null, error: error.message }
+  }
   return { data: null, error: null }
 }
